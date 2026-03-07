@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Report Breakdown — Marco A. Velarde</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: #a0aec0; margin-top: 2px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .header .meta span {
+    font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 14px; border-radius: 8px; color: #e2e8f0;
+  }
+  .header .meta span strong { color: #fff; }
+
+  .overall-grade {
+    text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
+    border: 2px solid #16a34a; background: #f0fdf4;
+  }
+  .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #16a34a; line-height: 1; }
+  .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .overall-grade .options { margin-top: 18px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .overall-grade .options p { font-size: 13px; color: #57534e; margin-bottom: 8px; padding-left: 18px; position: relative; }
+  .overall-grade .options p strong { color: #1a1a2e; }
+  .overall-grade .options p::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: #16a34a; }
+
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+  }
+  .section-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  }
+
+  .factor-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-info { flex: 1; }
+  .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
+  .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+  .grade-badge {
+    font-size: 15px; font-weight: 800; padding: 6px 16px; border-radius: 8px;
+    min-width: 40px; text-align: center; flex-shrink: 0; margin-left: 12px;
+  }
+  .grade-a { background: #dcfce7; color: #15803d; }
+  .grade-b { background: #d1fae5; color: #047857; }
+  .grade-c { background: #fef9c3; color: #a16207; }
+  .grade-d { background: #ffedd5; color: #c2410c; }
+  .grade-f { background: #fee2e2; color: #dc2626; }
+
+  .limiter-tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    background: #ffedd5; color: #c2410c; padding: 3px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th {
+    text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e2e8f0;
+  }
+  table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: #f8fafc; }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 600; }
+  .text-amber { color: #d97706; font-weight: 600; }
+  .text-muted { color: #94a3b8; }
+
+  .noted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .noted-grid { grid-template-columns: 1fr; } }
+  .noted-item { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+  .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+  .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .noted-item.wide { grid-column: 1 / -1; }
+
+  .strengths-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 500px) { .strengths-list { grid-template-columns: 1fr; } }
+  .strength-item {
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px;
+    font-size: 13px; color: #166534; font-weight: 500;
+  }
+  .strength-item .strength-label { color: #4ade80; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 3px; }
+
+  .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
+  .solution-step.priority-1 { background: #f0fdf4; border-color: #16a34a; }
+  .solution-step.priority-note { background: #f8fafc; border-color: #94a3b8; }
+  .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .solution-step.priority-1 .step-label { color: #16a34a; }
+  .solution-step.priority-note .step-label { color: #64748b; }
+  .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  .bottom-line {
+    text-align: center; padding: 18px; background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 10px; margin-top: 14px; font-size: 14px; font-weight: 600; color: #166534;
+  }
+
+  .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Credit Report Breakdown</h1>
+  <div class="subtitle">Huge Capital AI Credit Grading System</div>
+  <div class="meta">
+    <span><strong>Client:</strong> Marco A. Velarde</span>
+    <span><strong>Source:</strong> Experian FICO 8</span>
+    <span><strong>Score:</strong> 727</span>
+    <span><strong>Report:</strong> Dec 5, 2025</span>
+  </div>
+</div>
+
+<div class="overall-grade">
+  <div class="label">Overall Grade</div>
+  <div class="grade">A-</div>
+  <div class="meaning">Strong profile. 5 of 8 factors are A-grade with 0% revolving utilization, zero collections, zero bankruptcies, and a solid card profile. The two factors pulling this from a straight A are recent late payments on a Best Buy card (D) and 8 inquiries (D) — mostly from mortgage shopping. Neither is a hard stop.</div>
+  <div class="options">
+    <p><strong>Next Step:</strong> Proceed with funding.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">8</div>
+    Factor Breakdown
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">1. Credit Score</div>
+      <div class="factor-value">727 (Good — well above 700 threshold)</div>
+      <div class="factor-note">Being suppressed by the Best Buy late payments. Without those, likely 760+.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">2. Utilization</div>
+      <div class="factor-value">0.2% — $81 used / $34,250 available</div>
+      <div class="factor-note">Near-zero utilization. Below FICO High Achiever average of 6%. Exceptional.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">3. Late Payments <span class="limiter-tag">Limiting Factor</span></div>
+      <div class="factor-value">2 recent — Best Buy/CBNA: 30 days late (Feb 2025), 60 days late (Mar 2025)</div>
+      <div class="factor-note">Both on a $350 charge card. 9 months old. Will age out of "recent" window in ~15 months. Experian flags "serious delinquency" for the 60-day late.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">4. Credit Age</div>
+      <div class="factor-value">4 yrs 4 mos average / 11 yrs 2 mos oldest (GECU CC, Oct 2014)</div>
+      <div class="factor-note">Above 2-year threshold. Oldest account provides solid anchor. Young borrower (b. 1996) with decent history.</div>
+    </div>
+    <div class="grade-badge grade-b">B</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
+      <div class="factor-value">6 own unsecured cards — GECU $12K anchor, Raiz FCU $10K, BofA $9.3K</div>
+      <div class="factor-note">Strong card count and limits. 3 cards above $9K. Plus a Best Buy charge card (not counted here).</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">6. Inquiries <span class="limiter-tag">Limiting Factor</span></div>
+      <div class="factor-value">8 total — but 6 are mortgage-related (Aug-Dec 2024)</div>
+      <div class="factor-note">Only 2 non-mortgage inquiries: Cap One (Sep 2024), Macys (Apr 2024). Mortgage inquiries within a 45-day window count as 1 for FICO. Real impact is closer to 3-4.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">7. Collections / Charge-offs</div>
+      <div class="factor-value">0</div>
+      <div class="factor-note">Clean. No collection accounts reported.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">8. Bankruptcies</div>
+      <div class="factor-value">0</div>
+      <div class="factor-note">Clean. No public records reported.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">$</div>
+    Per-Card Utilization
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>GECU</td><td>Credit Card</td><td>$0</td><td>$12,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Raiz FCU fka TFCU</td><td>Credit Card</td><td>$0</td><td>$10,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Bank of America (Joint)</td><td>Credit Card</td><td>$81</td><td>$9,300</td><td class="text-green">~1%</td></tr>
+      <tr><td>AMEX/CBNA</td><td>Credit Card</td><td>$0</td><td>$1,100</td><td class="text-green">0%</td></tr>
+      <tr><td>Capital One</td><td>Credit Card</td><td>$0</td><td>$1,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Bank of America</td><td>Credit Card</td><td>$0</td><td>$500</td><td class="text-green">0%</td></tr>
+      <tr><td>Best Buy/CBNA</td><td>Charge Card</td><td>$0</td><td>$350</td><td class="text-green">0%</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top: 14px; padding: 12px 14px; background: #f0fdf4; border-radius: 8px; font-size: 12px; color: #166534; border: 1px solid #bbf7d0;">
+    <strong>All cards at 0% or near-zero.</strong> Total revolving utilization: $81 / $34,250 = 0.2%. This is ideal.
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #64748b;">i</div>
+    Noted Items (Not Graded)
+  </div>
+  <div class="noted-grid">
+    <div class="noted-item">
+      <div class="label">Authorized Users</div>
+      <div class="val">0</div>
+      <div class="detail">All accounts are his own. No AU inflation.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">DTI (Debt to Income)</div>
+      <div class="val">$4,293/mo</div>
+      <div class="detail">3 mortgages: GECU $1,303 + Nationstar $1,538 + Raiz FCU $1,451. Cards $1.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (Last 6 Months)</div>
+      <div class="val">0 new accounts</div>
+      <div class="detail">No accounts opened since Jun 2025. Clean runway.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (6-24 Months)</div>
+      <div class="val">3 accounts</div>
+      <div class="detail">Raiz FCU Mortgage (Jan 2025), Capital One CC (Sep 2024), AMEX/CBNA CC (Apr 2024).</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Card Breakdown</div>
+      <div class="val">6 unsecured / 1 charge / 0 AU</div>
+      <div class="detail">Best Buy is a charge card. 0 secured cards. All own accounts.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">HELOC</div>
+      <div class="val">None</div>
+      <div class="detail">No home equity lines of credit on file.</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Banking Relationships Visible on Report</div>
+      <div class="val">AMEX, Bank of America, Best Buy/Citibank, Capital One, GECU, Nationstar/Mr Cooper, Raiz FCU</div>
+      <div class="detail">GECU is the primary relationship (1 CC, 1 mortgage). 3 active mortgages across GECU, Nationstar, and Raiz FCU — likely investment properties or refinances.</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Inquiry Breakdown (8 Total)</div>
+      <div class="val">6 mortgage-related + 2 non-mortgage</div>
+      <div class="detail">Mortgage shopping (Aug-Dec 2024): Settlementone, Corelogic x3, Credco/UWM-Swift, EMS/US Bank. These count as 1-2 for FICO scoring within the 45-day window. Non-mortgage: Cap One NA (Sep 2024), Macys/CBNA (Apr 2024). Effective inquiry impact is closer to 3-4, not 8.</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Report Age Notice</div>
+      <div class="val">This report is from Dec 5, 2025 — approximately 3 months old</div>
+      <div class="detail">Account balances and inquiry counts may have changed since this report was pulled. Consider pulling a fresh report if proceeding immediately.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f0fdf4; color: #16a34a;">&#10003;</div>
+    What's Working Well
+  </div>
+  <div class="strengths-list">
+    <div class="strength-item">
+      <div class="strength-label">Credit Score</div>
+      727 — above 700 threshold. Would be 760+ without the Best Buy lates.
+    </div>
+    <div class="strength-item">
+      <div class="strength-label">Utilization</div>
+      0.2% — near-zero. Below FICO High Achiever average of 6%.
+    </div>
+    <div class="strength-item">
+      <div class="strength-label">Card Profile</div>
+      6 own unsecured cards with 3 above $9K. Strong anchors.
+    </div>
+    <div class="strength-item">
+      <div class="strength-label">Derogatory Marks</div>
+      Zero collections, zero bankruptcies, zero public records.
+    </div>
+    <div class="strength-item">
+      <div class="strength-label">Account Mix</div>
+      Credit cards, charge cards, mortgages, and paid auto loans. Diverse.
+    </div>
+    <div class="strength-item">
+      <div class="strength-label">Discipline</div>
+      All cards paid to $0. Aside from the Best Buy blip, payment history is clean.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f0fdf4; color: #16a34a;">&#9889;</div>
+    Next Steps
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 1</div>
+    <div class="step-title">Dispute inquiries on Experian</div>
+    <div class="step-detail">Experian inquiries can be removed in 24-48 hours through dispute. Marco has 8 inquiries (D grade). Note: inquiries tied to open personal accounts cannot be disputed — the Capital One inquiry (Sep 2024) is tied to his open Capital One card, so that one stays. The remaining 7 (Macy's + 6 mortgage-related) are disputable since they're either tied to closed/transferred accounts or weren't approved. Removing those would drop the count to 1 and push this factor from D to A.</div>
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 2</div>
+    <div class="step-title">Proceed with funding</div>
+    <div class="step-detail">727 score, 0% utilization, 6 own cards with strong limits, zero derogatory marks. This is a fundable A- profile. Once inquiries are cleared, this becomes a straight A.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #64748b;">i</div>
+    Other Useful Notes
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">Best Buy Late Payments (Feb-Mar 2025)</div>
+    <div class="step-title">2 lates on a $350 charge card — small account, big impact</div>
+    <div class="step-detail">A 30-day and 60-day late on a $350 Best Buy charge card is what's keeping this from a straight A and suppressing the score by ~30-40 points. The lates are 9 months old as of the report date. They'll age out of the "recent" window (24 months) by Feb-Mar 2027. Credit repair (Capital Quest) may be able to dispute these — worth exploring since removing them would push the score to 760+ and the grade to A.</div>
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">3 Active Mortgages</div>
+    <div class="step-title">GECU ($144K) + Nationstar ($160K) + Raiz FCU ($134K) = $439K mortgage debt</div>
+    <div class="step-detail">Combined mortgage payments of $4,292/mo. Mortgages are installment debt and don't affect revolving utilization. Heavy debt load is informational — likely investment properties or a primary + investment combo.</div>
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">Banking Relationships</div>
+    <div class="step-title">AMEX, Bank of America, Capital One, GECU, Raiz FCU, Nationstar/Mr Cooper</div>
+    <div class="step-detail">Strong existing relationships across both national banks and local credit unions. GECU is the deepest relationship (credit card + mortgage).</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
+    Full Account Inventory (10 Open + 7 Closed)
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Type</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AMEX/CBNA</td><td>Credit Card</td><td>Apr 2024</td><td>$0</td><td>$1,100</td><td>$0</td><td>Never Late</td></tr>
+      <tr><td>Bank of America</td><td>Credit Card</td><td>Aug 2023</td><td>$0</td><td>$500</td><td>$0</td><td>Never Late</td></tr>
+      <tr><td>Bank of America (Joint)</td><td>Credit Card</td><td>Aug 2023</td><td>$81</td><td>$9,300</td><td>$81/mo</td><td>Never Late</td></tr>
+      <tr><td>Best Buy/CBNA</td><td>Charge Card</td><td>Mar 2020</td><td>$0</td><td>$350</td><td>$0</td><td class="text-red">30+60 Day Late (Feb-Mar 2025)</td></tr>
+      <tr><td>Capital One</td><td>Credit Card</td><td>Sep 2024</td><td>$0</td><td>$1,000</td><td>$0</td><td>Never Late</td></tr>
+      <tr><td>GECU</td><td>Credit Card</td><td>Oct 2019</td><td>$0</td><td>$12,000</td><td>$0</td><td>Never Late</td></tr>
+      <tr><td>Raiz FCU fka TFCU</td><td>Credit Card</td><td>Oct 2022</td><td>$0</td><td>$10,000</td><td>$0</td><td>Never Late</td></tr>
+      <tr><td>GECU</td><td>Mortgage</td><td>Oct 2021</td><td>$144,505</td><td>$158,013</td><td>$1,303/mo</td><td>Never Late</td></tr>
+      <tr><td>Nationstar/Mr Cooper</td><td>Mortgage</td><td>Mar 2023</td><td>$160,539</td><td>$166,250</td><td>$1,538/mo</td><td>Never Late</td></tr>
+      <tr><td>Raiz FCU fka TFCU</td><td>Mortgage</td><td>Jan 2025</td><td>$134,820</td><td>$136,000</td><td>$1,451/mo</td><td>Never Late</td></tr>
+      <tr><td colspan="7" style="background: #f1f5f9; color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px;">Closed Accounts</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>GECU Mortgage</td><td>Mortgage</td><td>Oct 2022</td><td>-</td><td>$160,265</td><td>-</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>GECU Auto</td><td>Auto Loan</td><td>Feb 2019</td><td>-</td><td>$22,469</td><td>-</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>GECU CC ($9K)</td><td>Credit Card</td><td>Oct 2014</td><td>-</td><td>$9,000</td><td>-</td><td>Closed (by grantor)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>GECU Auto</td><td>Auto Loan</td><td>Sep 2016</td><td>-</td><td>$9,717</td><td>-</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>TD Auto Finance</td><td>Auto Loan</td><td>Dec 2018</td><td>-</td><td>$23,546</td><td>-</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>THD/CBNA (Home Depot)</td><td>Charge Card</td><td>Oct 2022</td><td>-</td><td>$5,001</td><td>-</td><td>Closed (by grantor)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>United Wholesale Mort</td><td>Mortgage</td><td>Mar 2023</td><td>-</td><td>$166,250</td><td>-</td><td>Closed (transferred)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="bottom-line">
+  Strong A- profile. Proceed with funding. The Best Buy lates are the only blemish on an otherwise clean report.
+</div>
+
+<div class="footer">
+  <div class="logo">Huge Capital</div>
+  AI Credit Grading System &middot; 8-Factor Analysis &middot; Majority-Based Grading
+</div>
+
+</body>
+</html>
