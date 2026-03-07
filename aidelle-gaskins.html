@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Report Breakdown — Aidelle Gaskins</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: #a0aec0; margin-top: 2px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .header .meta span {
+    font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 14px; border-radius: 8px; color: #e2e8f0;
+  }
+  .header .meta span strong { color: #fff; }
+
+  .overall-grade {
+    text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
+    border: 2px solid #dc2626; background: #fef2f2;
+  }
+  .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #dc2626; line-height: 1; }
+  .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+  }
+  .section-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  }
+
+  .factor-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-info { flex: 1; }
+  .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
+  .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+  .grade-badge {
+    font-size: 15px; font-weight: 800; padding: 6px 16px; border-radius: 8px;
+    min-width: 40px; text-align: center; flex-shrink: 0; margin-left: 12px;
+  }
+  .grade-a { background: #dcfce7; color: #15803d; }
+  .grade-b { background: #d1fae5; color: #047857; }
+  .grade-c { background: #fef9c3; color: #a16207; }
+  .grade-d { background: #ffedd5; color: #c2410c; }
+  .grade-f { background: #fee2e2; color: #dc2626; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th {
+    text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e2e8f0;
+  }
+  table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: #f8fafc; }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 600; }
+  .text-amber { color: #d97706; font-weight: 600; }
+  .text-muted { color: #94a3b8; }
+
+  .noted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .noted-grid { grid-template-columns: 1fr; } }
+  .noted-item { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+  .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+  .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .noted-item.wide { grid-column: 1 / -1; }
+
+  .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
+  .solution-step.priority-1 { background: #fef2f2; border-color: #dc2626; }
+  .solution-step.priority-2 { background: #fffbeb; border-color: #d97706; }
+  .solution-step.priority-3 { background: #eff6ff; border-color: #3b82f6; }
+  .solution-step.priority-note { background: #f8fafc; border-color: #94a3b8; }
+  .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .solution-step.priority-1 .step-label { color: #dc2626; }
+  .solution-step.priority-2 .step-label { color: #d97706; }
+  .solution-step.priority-3 .step-label { color: #3b82f6; }
+  .solution-step.priority-note .step-label { color: #64748b; }
+  .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  .bottom-line {
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
+  }
+  .bottom-line.grade-outlook-fix {
+    background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+  }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-auto td { background: #ecfdf5 !important; color: #065f46; border-left: 4px solid #10b981; }
+  .cat-student td { background: #ede9fe !important; color: #5b21b6; border-left: 4px solid #8b5cf6; }
+  .cat-closed td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
+
+  .disclaimer {
+    margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; font-size: 11px; color: #64748b; line-height: 1.6;
+  }
+
+  .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Credit Report Breakdown</h1>
+  <div class="subtitle">Huge Capital AI Credit Grading System</div>
+  <div class="meta">
+    <span><strong>Client:</strong> Aidelle Gaskins</span>
+    <span><strong>Source:</strong> Experian FICO 8</span>
+    <span><strong>Score:</strong> 717</span>
+    <span><strong>Report:</strong> Mar 7, 2026</span>
+  </div>
+</div>
+
+<div class="overall-grade">
+  <div class="label">Overall Grade</div>
+  <div class="grade">F</div>
+  <div class="meaning">Strong underlying profile &mdash; 19-year credit history, zero inquiries, zero collections, zero bankruptcies, all student loans paid off. However, 63% own-card utilization triggers a hard F. This is the most fixable type of F: pay down two cards, wait one billing cycle, and the profile transforms dramatically.</div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">8</div>
+    Factor Breakdown
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">1. Credit Score</div>
+      <div class="factor-value">717 &mdash; Above 700 threshold</div>
+      <div class="factor-note">High utilization and old lates are suppressing the score. Should jump to 750+ once utilization is addressed.</div>
+    </div>
+    <div class="grade-badge grade-b">B-</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">2. Utilization (Own Revolving)</div>
+      <div class="factor-value">63% &mdash; $8,307 used / $13,100 total own revolving limits</div>
+      <div class="factor-note">Capital One at 73% and Chase at 37%. Overall report shows 15% but that includes AU cards (AMEX $30K, WF $15.7K) which don't count.</div>
+    </div>
+    <div class="grade-badge grade-f">F</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">3. Late Payments</div>
+      <div class="factor-value">2x 30-day lates on Capital One &mdash; Jan 2020 &amp; Aug 2020</div>
+      <div class="factor-note">Both are 5+ years old and aging out. Most recent missed payment: 5 years 7 months ago. Will fall off entirely by mid-2027.</div>
+    </div>
+    <div class="grade-badge grade-b">B</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">4. Credit Age</div>
+      <div class="factor-value">11 yrs 5 mos average / oldest account 19 yrs 3 mos</div>
+      <div class="factor-note">Excellent depth. Oldest own open card (Capital One) is nearly 10 years old.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
+      <div class="factor-value">2 own cards &mdash; Capital One $9,500, Chase $3,600</div>
+      <div class="factor-note">No $10K anchor card (Cap One is close at $9.5K). Chase at $3,600 is below $5K minimum. Thin card profile for stacking.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">6. Inquiries</div>
+      <div class="factor-value">0 &mdash; Zero inquiries reported</div>
+      <div class="factor-note">Clean slate. Full runway for future applications.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">7. Collections / Charge-offs</div>
+      <div class="factor-value">0 &mdash; Clean</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">8. Bankruptcies</div>
+      <div class="factor-value">None &mdash; No public records</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">&#128179;</div>
+    Per-Card Utilization (Own Revolving)
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Capital One</td><td>Credit Card</td><td>$6,959</td><td>$9,500</td><td class="text-red">73%</td></tr>
+      <tr><td>JPMCB (Chase)</td><td>Credit Card</td><td>$1,348</td><td>$3,600</td><td class="text-amber">37%</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top: 14px; padding: 12px 14px; background: #fef2f2; border-radius: 8px; font-size: 12px; color: #991b1b; border: 1px solid #fecaca;">
+    <strong>Own-card utilization is 63%.</strong> Capital One alone accounts for most of the damage. Paying Capital One down to under $950 (10%) and Chase to under $360 (10%) would flip this factor from F to A instantly.
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #64748b;">i</div>
+    Noted Items (Not Graded)
+  </div>
+  <div class="noted-grid">
+    <div class="noted-item">
+      <div class="label">Authorized Users</div>
+      <div class="val">2 AU accounts</div>
+      <div class="detail">AMEX ($30K limit, $255 bal) and WFBNA ($15,700 limit, $0 bal). These inflate total limits but are excluded from own utilization.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">DTI (Debt to Income)</div>
+      <div class="val">~$849/mo minimum</div>
+      <div class="detail">Capital One $243 + Chase $40 + Navy Federal auto $566. Income not reported.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (Last 6 Months)</div>
+      <div class="val">1 new account</div>
+      <div class="detail">AMEX AU (Dec 2025). Low velocity is positive.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (6-24 Months)</div>
+      <div class="val">1 account</div>
+      <div class="detail">Navy Federal auto loan (Nov 2024).</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Card Breakdown</div>
+      <div class="val">2 own / 2 AU / 0 biz</div>
+      <div class="detail">Own: Capital One $9,500, Chase $3,600. AU: AMEX $30K, WFBNA $15,700.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">HELOC</div>
+      <div class="val">None</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Student Loans</div>
+      <div class="val">All paid off &mdash; $0 balance</div>
+      <div class="detail">10 MOHELA loans + 2 Navient loans, total original balance ~$69K. All closed and paid in full as of Jan 2025. No student debt obligations.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eff6ff; color: #3b82f6;">&#9889;</div>
+    Next Steps
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 1 &mdash; Pay Down Capital One (Critical)</div>
+    <div class="step-title">Reduce $6,959 balance to under $950</div>
+    <div class="step-detail">
+      Capital One at 73% utilization is the single biggest factor holding this profile back. Target: under $950 (10% of $9,500 limit). Even getting to $2,850 (30%) would be a major improvement, but under 10% is the goal for stacking readiness. Once paid down, wait for the next statement to close so the lower balance reports to the bureau.
+    </div>
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 2 &mdash; Pay Down Chase</div>
+    <div class="step-title">Reduce $1,348 balance to under $360</div>
+    <div class="step-detail">
+      Chase at 37% is in the D range. Target: under $360 (10% of $3,600 limit). Combined with Capital One paydown, this would drop total own utilization from 63% to under 10%, likely pushing the score into the 750+ range.
+    </div>
+  </div>
+
+  <div class="solution-step priority-2">
+    <div class="step-label">Step 3 &mdash; Request Capital One CLI</div>
+    <div class="step-title">Push the $9,500 limit over $10K</div>
+    <div class="step-detail">
+      Capital One is at $9,500 &mdash; just $500 shy of the $10K anchor card threshold. After paying down the balance and letting one clean cycle report, request a credit limit increase. With a 10-year history on the card and improved utilization, a bump to $10K+ is likely. This gives the profile its anchor card without opening new accounts.
+    </div>
+  </div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 4 &mdash; Strengthen Card Profile</div>
+    <div class="step-title">Add depth for stacking readiness</div>
+    <div class="step-detail">
+      Only 2 own cards with $13,100 total limits. After utilization is fixed and score recovers, a personal credit stack would add 2-3 more cards with higher limits. Zero inquiries means there's full runway for applications. The CSM will handle bank routing and sequencing during stacking.
+    </div>
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">Other Useful Notes</div>
+    <div class="step-detail">
+      <strong>Late Payments (2020):</strong> The two 30-day lates on Capital One from Jan and Aug 2020 are aging out naturally. They'll fall off entirely by mid-2027. No action needed &mdash; disputing lates on an open account with a balance rarely works.<br><br>
+      <strong>Auto Loan:</strong> Navy Federal auto loan ($27,717 remaining, $566/mo, 72 months). Only 18% paid down. Installment loans don't impact revolving utilization but do contribute to DTI.<br><br>
+      <strong>AU Cards:</strong> The AMEX ($30K) and WF ($15,700) AU cards add age and positive payment history to the file but don't count as own cards for stacking eligibility.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
+    Full Account Inventory
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <!-- Credit Cards -->
+      <tr class="category-header cat-cards"><td colspan="6">Credit Cards</td></tr>
+      <tr><td>Capital One</td><td>Jun 2016</td><td class="text-red">$6,959</td><td>$9,500</td><td>$243/mo</td><td>Own &mdash; 2 lates</td></tr>
+      <tr><td>JPMCB (Chase)</td><td>May 2017</td><td class="text-amber">$1,348</td><td>$3,600</td><td>$40/mo</td><td>Own</td></tr>
+      <tr><td>AMEX</td><td>Dec 2025</td><td>$255</td><td>$30,000</td><td>$40/mo</td><td>AU</td></tr>
+      <tr><td>WFBNA Card</td><td>Aug 2023</td><td>$0</td><td>$15,700</td><td>$0</td><td>AU</td></tr>
+
+      <!-- Auto Loans -->
+      <tr class="category-header cat-auto"><td colspan="6">Auto Loans</td></tr>
+      <tr><td>Navy Federal CU</td><td>Nov 2024</td><td>$27,717</td><td>$33,604</td><td>$566/mo</td><td>Own</td></tr>
+
+      <!-- Closed Accounts -->
+      <tr class="category-header cat-closed"><td colspan="6">Closed Accounts</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Ally Financial (Auto)</td><td>Mar 2017</td><td>&mdash;</td><td>$20,718</td><td>&mdash;</td><td>Paid / Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/Lowes (Card)</td><td>Nov 2019</td><td>&mdash;</td><td>$1,500</td><td>&mdash;</td><td>Closed by grantor</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/American Signatu (Card)</td><td>Nov 2015</td><td>&mdash;</td><td>$1,500</td><td>&mdash;</td><td>Closed by grantor</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>MOHELA (Student x10)</td><td>2007&ndash;2022</td><td>&mdash;</td><td>~$59K total</td><td>&mdash;</td><td>All paid off</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Navient (Student x2)</td><td>Dec 2006</td><td>&mdash;</td><td>$6,625</td><td>&mdash;</td><td>All paid off</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="bottom-line grade-outlook-fix">
+  <strong>Must follow the game plan before proceeding.</strong> The F is solely from utilization &mdash; the most fixable factor on the report. Pay down Capital One and Chase, wait one billing cycle for updated balances to report, and this profile becomes a <strong>B+ client</strong> with a 750+ score, 19 years of history, zero inquiries, zero collections, and full runway for stacking.
+</div>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
+</div>
+
+<div class="footer">
+  <div class="logo">Huge Capital</div>
+  AI Credit Grading System &middot; 8-Factor Analysis
+</div>
+
+</body>
+</html>
