@@ -71,11 +71,6 @@
   .grade-d { background: #ffedd5; color: #c2410c; }
   .grade-f { background: #fee2e2; color: #dc2626; }
 
-  .blocker-tag {
-    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle;
-  }
-
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   table th {
     text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
@@ -97,14 +92,6 @@
   .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
   .noted-item.wide { grid-column: 1 / -1; }
 
-  .strengths-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media (max-width: 500px) { .strengths-list { grid-template-columns: 1fr; } }
-  .strength-item {
-    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px;
-    font-size: 13px; color: #166534; font-weight: 500;
-  }
-  .strength-item .strength-label { color: #4ade80; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 3px; }
-
   .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
   .solution-step.priority-1 { background: #fef2f2; border-color: #dc2626; }
   .solution-step.priority-2 { background: #fffbeb; border-color: #d97706; }
@@ -119,9 +106,22 @@
   .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
 
   .bottom-line {
-    text-align: center; padding: 18px; background: #fefce8; border: 1px solid #fde68a;
-    border-radius: 10px; margin-top: 14px; font-size: 14px; font-weight: 600; color: #92400e;
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
   }
+  .bottom-line.grade-outlook-proceed {
+    background: #fefce8; border: 1px solid #fde68a; color: #92400e;
+  }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-auto td { background: #ecfdf5 !important; color: #065f46; border-left: 4px solid #10b981; }
+  .cat-personal td { background: #fef3c7 !important; color: #92400e; border-left: 4px solid #f59e0b; }
+  .cat-student td { background: #ede9fe !important; color: #5b21b6; border-left: 4px solid #8b5cf6; }
+  .cat-other td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
 
   .disclaimer {
     margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
@@ -148,8 +148,7 @@
 <div class="overall-grade">
   <div class="label">Overall Grade</div>
   <div class="grade">C+</div>
-  <div class="meaning">Mixed profile with solid fundamentals dragged down by weak spots. 723 score, 2% utilization, zero late payments, zero collections — but the card profile is very thin (max limit $3,500, no anchor card) and a Chapter 7 bankruptcy from 2020 is still on file. Can proceed with low expectations, or build the card profile first and come back stronger.</div>
-  <div style="margin-top: 12px; font-size: 13px; color: #78716c;">GPA: 2.875 / 4.0 &mdash; 3A(12) + 3B(9) + 2D(2) = 23 &divide; 8 = 2.875</div>
+  <div class="meaning">Solid fundamentals — 723 score, 2% utilization, zero late payments, zero collections. Dragged down by a thin card profile (max limit $3,500, no anchor card) and a Chapter 7 BK from 2020.</div>
 </div>
 
 <div class="card">
@@ -161,8 +160,8 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">1. Credit Score</div>
-      <div class="factor-value">723 — Good, above 700 threshold</div>
-      <div class="factor-note">Experian confirms "no missed payments" and "low revolving usage" as positive factors. BK and high installment loan balances are suppressing the score.</div>
+      <div class="factor-value">723 — Above 700 threshold</div>
+      <div class="factor-note">BK and high installment balances are suppressing the score.</div>
     </div>
     <div class="grade-badge grade-b">B</div>
   </div>
@@ -171,7 +170,7 @@
     <div class="factor-info">
       <div class="factor-name">2. Utilization (Own Revolving)</div>
       <div class="factor-value">2% — $104 used / $5,850 total revolving limits</div>
-      <div class="factor-note">Excellent. All 3 credit cards are near zero. Experian confirms revolving ratio is at 2%.</div>
+      <div class="factor-note">Excellent. All 3 cards near zero.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -179,8 +178,7 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">3. Late Payments</div>
-      <div class="factor-value">0 — zero missed payments ever across all accounts</div>
-      <div class="factor-note">Perfect payment history on all 17 open and all closed accounts. Exceptional.</div>
+      <div class="factor-value">0 — Zero missed payments across all accounts</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -188,8 +186,8 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">4. Credit Age</div>
-      <div class="factor-value">5 yrs 9 mos average / oldest account 18 yrs 1 mo (Navient, Oct 2007)</div>
-      <div class="factor-note">File has depth going back to 2007. Oldest open account is MOHELA student loan (Dec 2017, ~8 yrs). However, 5 new accounts opened in last 6 months drag the open-account average down significantly.</div>
+      <div class="factor-value">5 yrs 9 mos average / oldest account 18 yrs 1 mo</div>
+      <div class="factor-note">Good depth. 5 new accounts in last 6 months drag the open-account average down.</div>
     </div>
     <div class="grade-badge grade-b">B</div>
   </div>
@@ -197,8 +195,8 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
-      <div class="factor-value">3 own unsecured cards — highest limit $3,500 (WFBNA)</div>
-      <div class="factor-note">Weak card profile. All limits are low: $3,500 + $300 + $300. No anchor card ($10K+). No card meets the $5K minimum. This is the primary limitation for business credit stacking.</div>
+      <div class="factor-value">3 cards — highest limit $3,500 (WFBNA)</div>
+      <div class="factor-note">No anchor card ($10K+). No card meets $5K minimum. Primary limitation for stacking.</div>
     </div>
     <div class="grade-badge grade-d">D</div>
   </div>
@@ -206,8 +204,8 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">6. Inquiries</div>
-      <div class="factor-value">5 total — auto shopping cluster (Oct 31–Nov 3), WF card (Oct 31), Santander (Mar 2025)</div>
-      <div class="factor-note">3 of the 5 are auto shopping inquiries within a 4-day window (FICO counts as 1). 2 inquiries are tied to open accounts (WFBNA Card, Santander) and cannot be disputed. CUDL/Vantage West and A+ Federal CU did not result in open accounts and may be disputable.</div>
+      <div class="factor-value">5 total — auto shopping cluster + WF card + Santander</div>
+      <div class="factor-note">2 disputable (CUDL/Vantage West, A+ FCU — no accounts opened). 2 tied to open accounts (can't dispute). 1 unclear (WF Nov 1).</div>
     </div>
     <div class="grade-badge grade-b">B</div>
   </div>
@@ -215,8 +213,7 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">7. Collections / Charge-offs</div>
-      <div class="factor-value">0</div>
-      <div class="factor-note">Clean. No collection accounts reported.</div>
+      <div class="factor-value">0 — Clean</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -224,8 +221,8 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">8. Bankruptcies</div>
-      <div class="factor-value">Chapter 7 — Discharged, filed Feb 23, 2020 (~5 yrs 9 mos ago)</div>
-      <div class="factor-note">Discharged and over 5 years old. Will remain on report until ~Feb 2030. Some lenders restrict post-BK applicants, but many will work with 5+ year discharged BK.</div>
+      <div class="factor-value">Chapter 7 — Discharged Feb 2020 (~5 yrs 9 mos ago)</div>
+      <div class="factor-note">On report until ~Feb 2030. Most lenders will work with 5+ year discharged BK.</div>
     </div>
     <div class="grade-badge grade-d">D</div>
   </div>
@@ -247,7 +244,7 @@
     </tbody>
   </table>
   <div style="margin-top: 14px; padding: 12px 14px; background: #fffbeb; border-radius: 8px; font-size: 12px; color: #92400e; border: 1px solid #fde68a;">
-    <strong>Utilization is excellent at 2%, but total revolving limits are only $4,100.</strong> For business credit stacking, the CSM needs anchor cards with $10K+ limits. The current card profile is too thin to support meaningful stacking.
+    <strong>Utilization is excellent at 2%, but total revolving limits are only $4,100.</strong> Anchor cards with $10K+ limits needed for stacking.
   </div>
 </div>
 
@@ -260,80 +257,35 @@
     <div class="noted-item">
       <div class="label">Authorized Users</div>
       <div class="val">0 AU accounts</div>
-      <div class="detail">No authorized user accounts on file.</div>
     </div>
     <div class="noted-item">
       <div class="label">DTI (Debt to Income)</div>
       <div class="val">$1,787/mo</div>
-      <div class="detail">Auto loans $1,211 (Exeter $368 + Santander $843) + Secured loan $232 (Mariner) + BNPL $268 (Affirm) + Cards $66 + Kovo $10. Student loan currently $0 (deferred until Nov 2028).</div>
+      <div class="detail">Auto $1,211 + Secured $232 + BNPL $268 + Cards $66 + Kovo $10. Student loan deferred until Nov 2028.</div>
     </div>
     <div class="noted-item">
       <div class="label">Account Velocity (Last 6 Months)</div>
       <div class="val">5 new accounts</div>
-      <div class="detail">Kovo (Jun), Nav Technologies (Aug), Perpay (Sep), Affirm (Oct), WFBNA Card (Oct). High velocity — may need to cool off before applying for more credit.</div>
+      <div class="detail">Kovo, Nav Technologies, Perpay, Affirm, WFBNA Card. High velocity — may need to cool off.</div>
     </div>
     <div class="noted-item">
       <div class="label">Account Velocity (6-24 Months)</div>
       <div class="val">2 accounts</div>
-      <div class="detail">Credit One Bank (Jan 2024), Santander Auto Loan (Mar 2025).</div>
+      <div class="detail">Credit One Bank (Jan 2024), Santander (Mar 2025).</div>
     </div>
     <div class="noted-item">
       <div class="label">Card Breakdown</div>
-      <div class="val">3 own unsecured / 1 charge / 1 biz / 0 AU</div>
-      <div class="detail">Credit One $300, TBOM/Milestone $300, WFBNA $3,500. Plus Perpay charge card $1K and Nav Technologies business card $750 (co-signer). 1 closed charge card (SYNCB/TJX $100, closed at grantor's request Dec 2018).</div>
+      <div class="val">3 own / 1 charge / 1 biz / 0 AU</div>
+      <div class="detail">Credit One $300, Milestone $300, WFBNA $3,500. Plus Perpay charge $1K, Nav biz $750.</div>
     </div>
     <div class="noted-item">
       <div class="label">HELOC</div>
       <div class="val">None</div>
-      <div class="detail">No HELOC on file.</div>
-    </div>
-    <div class="noted-item">
-      <div class="label">Student Loan</div>
-      <div class="val">$134,313 (deferred)</div>
-      <div class="detail">MOHELA, opened Dec 2017, 300-month term. Status: deferred, payments begin Nov 2028. Original balance $109,171 — balance has grown to $134K (interest capitalization). This is a major future DTI factor.</div>
-    </div>
-    <div class="noted-item">
-      <div class="label">Self-Reported Accounts</div>
-      <div class="val">6 accounts</div>
-      <div class="detail">Insurance: Biberk, Allstate, Foresters Financial. Telecom: AT&T ($368/mo), FuboTV ($92/mo), Amazon Prime ($12/mo). These are Experian Boost accounts — do not count toward traditional credit grading.</div>
     </div>
     <div class="noted-item wide">
-      <div class="label">Banking Relationships Visible on Report</div>
-      <div class="val">Credit One, Exeter Finance, Mariner Finance, MOHELA, Nav Technologies, Santander, TBOM/Milestone, Wells Fargo</div>
-      <div class="detail">Post-BK rebuild profile. Mix of subprime cards (Credit One, Milestone), secured loan (Mariner), auto loans (Exeter, Santander), credit builders (Kovo, Perpay, Nav), and student loan (MOHELA). WF card is newest and highest-limit card at $3,500.</div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="section-title">
-    <div class="icon" style="background: #f0fdf4; color: #16a34a;">&#10003;</div>
-    What's Working Well
-  </div>
-  <div class="strengths-list">
-    <div class="strength-item">
-      <div class="strength-label">Credit Score</div>
-      723 — rebuilt to "Good" range, above the 700 threshold, just 4 years post-BK discharge
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Utilization</div>
-      2% revolving usage — near-perfect. Low balances across all cards.
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Payment History</div>
-      Zero late payments ever across all accounts — pre and post-BK
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Derogatory Marks</div>
-      Zero collections, zero charge-offs. BK is the only negative and it's 5+ years old.
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Credit File Depth</div>
-      18-year credit history with 5y9m average age — file has depth despite post-BK rebuild
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Rebuild Trajectory</div>
-      Strong post-BK rebuild. Score, payment history, and utilization all in good shape. Foundation is solid.
+      <div class="label">Student Loan</div>
+      <div class="val">$134,313 (deferred until Nov 2028)</div>
+      <div class="detail">MOHELA, 300-month term. Balance has grown from $109K (interest capitalization). Major future DTI factor — stacking should be completed before payments resume.</div>
     </div>
   </div>
 </div>
@@ -346,45 +298,38 @@
 
   <div class="solution-step priority-1">
     <div class="step-label">Step 1 — Build the Card Profile</div>
-    <div class="step-title">Current card limits are too low for business credit stacking</div>
+    <div class="step-title">Card limits too low for business credit stacking</div>
     <div class="step-detail">
-      Total revolving limits: $4,100 across 3 cards ($3,500 + $300 + $300). For business credit stacking to produce meaningful results, the CSM needs to see at least one anchor card at $10K+.<br><br>
-      <strong>Action:</strong> Request credit limit increases on existing cards, especially the $3,500 card (newest, most room to grow). The CSM will guide the personal credit stacking strategy to build up the card profile before beginning the business side.<br><br>
-      <strong>Note:</strong> The 5 new accounts opened in the last 6 months may slow approvals. Timing matters — let the recent accounts season before applying for more.
+      Total revolving: $4,100 across 3 cards ($3,500 + $300 + $300). Need at least one anchor card at $10K+. Request CLI on the $3,500 WF card and work with the CSM on a personal credit stacking strategy.<br><br>
+      <strong>Note:</strong> 5 new accounts in last 6 months may slow approvals — let recent accounts season before applying for more.
     </div>
   </div>
 
   <div class="solution-step priority-2">
     <div class="step-label">Step 2 — Manage Inquiry Exposure</div>
-    <div class="step-title">5 inquiries currently on file — 2 may be disputable</div>
+    <div class="step-title">2 of 5 inquiries may be disputable</div>
     <div class="step-detail">
-      <strong>Cannot dispute (tied to open accounts):</strong><br>
-      &bull; WFBNA Card (Oct 31, 2025) — resulted in open WF credit card<br>
-      &bull; Santander Consumer USA (Mar 5, 2025) — resulted in open auto loan<br><br>
-      <strong>Potentially disputable (no resulting open account):</strong><br>
-      &bull; CUDL/Vantage West CU (Nov 3, 2025) — auto shopping, no account opened<br>
-      &bull; A+ Federal Credit Union (Oct 31, 2025) — no account opened<br><br>
-      <strong>Unclear:</strong> Wells Fargo (Nov 1, 2025) — may be tied to the WFBNA card application or a separate auto inquiry. If separate from the card, may be disputable.<br><br>
-      Removing 2-3 disputable inquiries would bring the count to 2-3, preserving runway for future applications.
+      <strong>Can't dispute (open accounts):</strong> WFBNA Card, Santander<br>
+      <strong>Disputable (no account opened):</strong> CUDL/Vantage West CU, A+ Federal CU<br>
+      <strong>Unclear:</strong> Wells Fargo (Nov 1) — may be tied to WF card or separate auto inquiry<br><br>
+      Removing 2-3 would preserve runway for future applications.
     </div>
   </div>
 
   <div class="solution-step priority-3">
-    <div class="step-label">Step 3 — Slow Down New Account Activity</div>
-    <div class="step-title">5 new accounts in 6 months is high velocity — let them season</div>
+    <div class="step-label">Step 3 — Cool Off New Account Activity</div>
+    <div class="step-title">Let recent accounts season 6-12 months</div>
     <div class="step-detail">
-      Several recent accounts are credit builders (Kovo, Perpay, Nav Technologies). These serve a purpose on the file but opening too many accounts too fast hurts approval odds and averages down the credit age. Let these accounts age 6-12 months before the next round of applications.
+      Several recent accounts are credit builders (Kovo, Perpay, Nav). Opening too many too fast hurts approval odds and averages down credit age.
     </div>
   </div>
 
   <div class="solution-step priority-note">
     <div class="step-label">Other Useful Notes</div>
-    <div class="step-title">Context for the CSM</div>
     <div class="step-detail">
-      <strong>Bankruptcy:</strong> Chapter 7 filed Feb 2020, discharged. Will remain on report until ~Feb 2030. At 5+ years old, most lenders that work post-BK will consider this profile. Some premium lenders may still decline.<br><br>
-      <strong>Student Loan ($134K deferred):</strong> Payments begin Nov 2028. On a 300-month term at $109K original, monthly payments could be $800-$1,200+. This doesn't affect current DTI but will be a major factor in ~2 years. Stacking should be completed well before payments resume.<br><br>
-      <strong>Installment Loan Mix:</strong> Two auto loans ($843/mo Santander + $368/mo Exeter) and a secured loan ($232/mo Mariner) make up the bulk of current debt. $54,819 in total loan debt. These are installment accounts and don't impact utilization grading, but they contribute to overall DTI.<br><br>
-      <strong>Post-BK Rebuild Timeline:</strong> This is a well-executed post-BK rebuild. Score has recovered to 723, payment history is perfect, and utilization is excellent. The next phase is growing the card limits so the profile can support business credit stacking.
+      <strong>Bankruptcy:</strong> Ch. 7 filed Feb 2020, discharged. On report until ~Feb 2030. At 5+ years, most lenders will work with this.<br><br>
+      <strong>Student Loan ($134K deferred):</strong> Payments begin Nov 2028, likely $800-$1,200+/mo. Stacking should be completed well before then.<br><br>
+      <strong>Installment Debt:</strong> Two auto loans + secured loan = $1,443/mo. Installment accounts don't impact utilization but contribute to DTI.
     </div>
   </div>
 </div>
@@ -392,58 +337,66 @@
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
-    Full Account Inventory (17 Open + 12 Closed)
+    Full Account Inventory
   </div>
   <table>
     <thead>
-      <tr><th>Account</th><th>Type</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
     </thead>
     <tbody>
-      <tr><td>WFBNA Card</td><td>Credit Card</td><td>Oct 2025</td><td>$63</td><td>$3,500</td><td>$25/mo</td><td>Own</td></tr>
-      <tr><td>TBOM/Milestone</td><td>Credit Card</td><td>Oct 2020</td><td>$33</td><td>$300</td><td>$33/mo</td><td>Own</td></tr>
-      <tr><td>Credit One Bank NA</td><td>Credit Card</td><td>Jan 2024</td><td>$8</td><td>$300</td><td>$8/mo</td><td>Own</td></tr>
-      <tr><td>Perpay</td><td>Charge Card</td><td>Sep 2025</td><td>$0</td><td>$1,000</td><td>$0</td><td>Own</td></tr>
-      <tr><td>Nav Technologies</td><td>Business Card</td><td>Aug 2025</td><td>$0</td><td>$750</td><td>$0</td><td>Co-signer</td></tr>
-      <tr><td>Santander Bank</td><td>Auto Loan</td><td>Mar 2025</td><td>$36,837</td><td>$36,694</td><td>$843/mo</td><td>Own</td></tr>
-      <tr><td>Exeter Finance</td><td>Auto Loan</td><td>Jun 2023</td><td>$16,862</td><td>$18,985</td><td>$368/mo</td><td>Own</td></tr>
-      <tr><td>MOHELA</td><td>Student Loan</td><td>Dec 2017</td><td>$134,313</td><td>$109,171</td><td>$0 (deferred)</td><td>Own</td></tr>
-      <tr><td>Mariner Finance</td><td>Secured Loan</td><td>Dec 2022</td><td>$458</td><td>$5,532</td><td>$232/mo</td><td>Own</td></tr>
-      <tr><td>Affirm Inc</td><td>BNPL</td><td>Oct 2025</td><td>$372</td><td>$372</td><td>$268/mo</td><td>Own</td></tr>
-      <tr><td>Kovo Inc</td><td>Sales Contract</td><td>Jun 2025</td><td>$190</td><td>$240</td><td>$10/mo</td><td>Own</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/Biberk Insurance</td><td>Insurance (self-reported)</td><td>—</td><td>$0</td><td>$103</td><td>$103/mo</td><td>Self-rpt</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/Allstate</td><td>Insurance (self-reported)</td><td>—</td><td>$0</td><td>$464</td><td>$464/mo</td><td>Self-rpt</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/Foresters Financial</td><td>Insurance (self-reported)</td><td>—</td><td>$0</td><td>$25</td><td>$25/mo</td><td>Self-rpt</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/ATT</td><td>Telecom (self-reported)</td><td>—</td><td>$368</td><td>$368</td><td>$368/mo</td><td>Self-rpt</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/FuboTV</td><td>Telecom (self-reported)</td><td>—</td><td>$92</td><td>$92</td><td>$92/mo</td><td>Self-rpt</td></tr>
-      <tr style="color: #94a3b8;"><td>CHKG/Amazon Prime</td><td>Telecom (self-reported)</td><td>—</td><td>$12</td><td>$12</td><td>$12/mo</td><td>Self-rpt</td></tr>
-      <tr><td colspan="7" style="background: #f1f5f9; color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px;">Closed Accounts</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Prestige Financial Svc</td><td>Auto Loan</td><td>Mar 2020</td><td>—</td><td>$25,752</td><td>—</td><td>Closed (Joint)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Upstart Network</td><td>Personal Loan</td><td>Sep 2021</td><td>—</td><td>$6,800</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Mariner Finance</td><td>Personal Loan</td><td>Jul 2021</td><td>—</td><td>$3,100</td><td>—</td><td>Refinanced</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>OneMain</td><td>Personal Loan</td><td>Mar 2021</td><td>—</td><td>$2,600</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Affirm Inc</td><td>BNPL</td><td>Jul 2025</td><td>—</td><td>$894</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/TJX COS</td><td>Charge Card</td><td>May 2018</td><td>—</td><td>$100</td><td>—</td><td>Closed (grantor)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Acima Digital</td><td>Lease</td><td>Dec 2017</td><td>—</td><td>$2,489</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (1)</td><td>Student Loan</td><td>Jun 2016</td><td>—</td><td>$15,226</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (2)</td><td>Student Loan</td><td>Nov 2015</td><td>—</td><td>$31,371</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (3)</td><td>Student Loan</td><td>Mar 2017</td><td>—</td><td>$7,728</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Navient (1)</td><td>Student Loan</td><td>Oct 2007</td><td>—</td><td>$1,500</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Navient (2)</td><td>Student Loan</td><td>Oct 2007</td><td>—</td><td>$1,334</td><td>—</td><td>Closed</td></tr>
+      <!-- Credit Cards -->
+      <tr class="category-header cat-cards"><td colspan="6">Credit Cards</td></tr>
+      <tr><td>WFBNA Card</td><td>Oct 2025</td><td>$63</td><td>$3,500</td><td>$25/mo</td><td>Own</td></tr>
+      <tr><td>TBOM/Milestone</td><td>Oct 2020</td><td>$33</td><td>$300</td><td>$33/mo</td><td>Own</td></tr>
+      <tr><td>Credit One Bank NA</td><td>Jan 2024</td><td>$8</td><td>$300</td><td>$8/mo</td><td>Own</td></tr>
+      <tr><td>Perpay</td><td>Sep 2025</td><td>$0</td><td>$1,000</td><td>$0</td><td>Charge</td></tr>
+      <tr><td>Nav Technologies</td><td>Aug 2025</td><td>$0</td><td>$750</td><td>$0</td><td>Biz (co-sign)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/TJX COS</td><td>May 2018</td><td>—</td><td>$100</td><td>—</td><td>Closed</td></tr>
+
+      <!-- Auto Loans -->
+      <tr class="category-header cat-auto"><td colspan="6">Auto Loans</td></tr>
+      <tr><td>Santander Bank</td><td>Mar 2025</td><td>$36,837</td><td>$36,694</td><td>$843/mo</td><td>Own</td></tr>
+      <tr><td>Exeter Finance</td><td>Jun 2023</td><td>$16,862</td><td>$18,985</td><td>$368/mo</td><td>Own</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Prestige Financial Svc</td><td>Mar 2020</td><td>—</td><td>$25,752</td><td>—</td><td>Closed (Joint)</td></tr>
+
+      <!-- Personal Loans -->
+      <tr class="category-header cat-personal"><td colspan="6">Personal / Secured Loans</td></tr>
+      <tr><td>Mariner Finance</td><td>Dec 2022</td><td>$458</td><td>$5,532</td><td>$232/mo</td><td>Secured</td></tr>
+      <tr><td>Affirm Inc</td><td>Oct 2025</td><td>$372</td><td>$372</td><td>$268/mo</td><td>BNPL</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Upstart Network</td><td>Sep 2021</td><td>—</td><td>$6,800</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Mariner Finance</td><td>Jul 2021</td><td>—</td><td>$3,100</td><td>—</td><td>Refinanced</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>OneMain</td><td>Mar 2021</td><td>—</td><td>$2,600</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Affirm Inc</td><td>Jul 2025</td><td>—</td><td>$894</td><td>—</td><td>Closed</td></tr>
+
+      <!-- Student Loans -->
+      <tr class="category-header cat-student"><td colspan="6">Student Loans</td></tr>
+      <tr><td>MOHELA</td><td>Dec 2017</td><td>$134,313</td><td>$109,171</td><td>$0 (deferred)</td><td>Own</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (1)</td><td>Jun 2016</td><td>—</td><td>$15,226</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (2)</td><td>Nov 2015</td><td>—</td><td>$31,371</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Dept of Ed/Aidvantage (3)</td><td>Mar 2017</td><td>—</td><td>$7,728</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Navient (1)</td><td>Oct 2007</td><td>—</td><td>$1,500</td><td>—</td><td>Closed</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Navient (2)</td><td>Oct 2007</td><td>—</td><td>$1,334</td><td>—</td><td>Closed</td></tr>
+
+      <!-- Other -->
+      <tr class="category-header cat-other"><td colspan="6">Other (Credit Builders / Lease)</td></tr>
+      <tr><td>Kovo Inc</td><td>Jun 2025</td><td>$190</td><td>$240</td><td>$10/mo</td><td>Own</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Acima Digital</td><td>Dec 2017</td><td>—</td><td>$2,489</td><td>—</td><td>Closed</td></tr>
     </tbody>
   </table>
 </div>
 
-<div class="bottom-line">
-  Can proceed with low expectations, or take the time to build the card profile first. The fundamentals are there — score, utilization, payment history are all solid. Fix the card limits and this becomes a B client.
+<div class="bottom-line grade-outlook-proceed">
+  <strong>Can proceed with low expectations</strong> — score, utilization, and payment history are solid but card limits are too thin for meaningful stacking results.<br>
+  <strong>Or be patient</strong> — build the card profile (CLI increases + personal credit stack) and come back as a <strong>B client</strong> with significantly better outcomes.
 </div>
 
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> This credit report breakdown is for informational purposes only and does not constitute financial advice. It is based on a single-bureau snapshot (Experian) and does not reflect data from TransUnion or Equifax. Actual lender decisions depend on additional factors including income verification, business financials, and lender-specific underwriting criteria. This analysis is intended to help our team assess readiness for business credit stacking and identify areas for improvement. Always consult with your CSM before making credit decisions.
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
 </div>
 
 <div class="footer">
   <div class="logo">Huge Capital</div>
-  AI Credit Grading System &middot; 8-Factor Analysis &middot; Majority-Based Grading
+  AI Credit Grading System &middot; 8-Factor Analysis
 </div>
 
 </body>
