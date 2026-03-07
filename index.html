@@ -38,11 +38,7 @@
   }
   .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
   .overall-grade .grade { font-size: 80px; font-weight: 900; color: #16a34a; line-height: 1; }
-  .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 540px; margin-left: auto; margin-right: auto; }
-  .overall-grade .options { margin-top: 18px; text-align: left; max-width: 540px; margin-left: auto; margin-right: auto; }
-  .overall-grade .options p { font-size: 13px; color: #57534e; margin-bottom: 8px; padding-left: 18px; position: relative; }
-  .overall-grade .options p strong { color: #1a1a2e; }
-  .overall-grade .options p::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: #16a34a; }
+  .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
   .card {
     border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
@@ -73,11 +69,7 @@
   .grade-b { background: #d1fae5; color: #047857; }
   .grade-c { background: #fef9c3; color: #a16207; }
   .grade-d { background: #ffedd5; color: #c2410c; }
-
-  .limiter-tag {
-    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    background: #d1fae5; color: #047857; padding: 3px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle;
-  }
+  .grade-f { background: #fee2e2; color: #dc2626; }
 
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   table th {
@@ -98,29 +90,37 @@
   .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
   .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
   .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
-
   .noted-item.wide { grid-column: 1 / -1; }
 
-  .strengths-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media (max-width: 500px) { .strengths-list { grid-template-columns: 1fr; } }
-  .strength-item {
-    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px;
-    font-size: 13px; color: #166534; font-weight: 500;
-  }
-  .strength-item .strength-label { color: #4ade80; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 3px; }
-
   .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
-  .solution-step.priority-1 { background: #f0fdf4; border-color: #16a34a; }
+  .solution-step.priority-go { background: #f0fdf4; border-color: #16a34a; }
   .solution-step.priority-note { background: #f8fafc; border-color: #94a3b8; }
   .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .solution-step.priority-1 .step-label { color: #16a34a; }
+  .solution-step.priority-go .step-label { color: #16a34a; }
   .solution-step.priority-note .step-label { color: #64748b; }
   .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
   .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
 
   .bottom-line {
-    text-align: center; padding: 18px; background: #f0fdf4; border: 1px solid #bbf7d0;
-    border-radius: 10px; margin-top: 14px; font-size: 14px; font-weight: 600; color: #166534;
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
+  }
+  .bottom-line.grade-outlook-go {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;
+  }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-auto td { background: #ecfdf5 !important; color: #065f46; border-left: 4px solid #10b981; }
+  .cat-student td { background: #ede9fe !important; color: #5b21b6; border-left: 4px solid #8b5cf6; }
+  .cat-other td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
+
+  .disclaimer {
+    margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; font-size: 11px; color: #64748b; line-height: 1.6;
   }
 
   .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
@@ -143,11 +143,7 @@
 <div class="overall-grade">
   <div class="label">Overall Grade</div>
   <div class="grade">A-</div>
-  <div class="meaning">You're in great shape. 7 out of 8 factors are A-grade. The only factor holding this from a straight A is the credit card count (2 own cards instead of 3+). This does not slow us down.</div>
-  <div class="options">
-    <p><strong>Estimated Funding Range:</strong> $100K - $250K+</p>
-    <p><strong>Next Step:</strong> Proceed with funding.</p>
-  </div>
+  <div class="meaning">Near-perfect profile. 7 out of 8 factors are A-grade. The only factor holding this from a straight A is the credit card count (2 own cards instead of 3+). This does not slow us down.</div>
 </div>
 
 <div class="card">
@@ -159,17 +155,17 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">1. Credit Score</div>
-      <div class="factor-value">799 (Very Good — 1 point from Exceptional)</div>
-      <div class="factor-note">Elite. Above 99% of FICO High Achievers average.</div>
+      <div class="factor-value">799 — 1 point from Exceptional tier</div>
+      <div class="factor-note">Elite. Student loan principal paydown (0%) is the only thing keeping this from 820+.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
 
   <div class="factor-row">
     <div class="factor-info">
-      <div class="factor-name">2. Utilization</div>
-      <div class="factor-value">4% — $715 used / $19,000 available</div>
-      <div class="factor-note">Excellent. Well below 10% threshold. Below FICO High Achiever avg of 6%.</div>
+      <div class="factor-name">2. Utilization (Own Revolving)</div>
+      <div class="factor-value">4% — $715 used / $19,000 total revolving limits</div>
+      <div class="factor-note">Excellent. Below FICO High Achiever average of 6%.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -177,8 +173,7 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">3. Late Payments</div>
-      <div class="factor-value">0 — zero missed payments ever</div>
-      <div class="factor-note">Perfect payment history across all 15 open accounts.</div>
+      <div class="factor-value">0 — Zero missed payments across all 15 open accounts</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -187,15 +182,15 @@
     <div class="factor-info">
       <div class="factor-name">4. Credit Age</div>
       <div class="factor-value">9 yrs 10 mos average / 16 yrs 11 mos oldest</div>
-      <div class="factor-note">Strong. Well above 5-year threshold. Student loans provide deep history.</div>
+      <div class="factor-note">Strong depth. Student loans provide long history anchor.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
 
   <div class="factor-row">
     <div class="factor-info">
-      <div class="factor-name">5. Credit Cards (Own) <span class="limiter-tag">Minor Factor</span></div>
-      <div class="factor-value">2 own unsecured cards — Apple Card $10K anchor</div>
+      <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
+      <div class="factor-value">2 own cards — Apple Card $10K anchor, Discover $4K</div>
       <div class="factor-note">B instead of A (needs 3+ cards). Does not affect funding — proceed.</div>
     </div>
     <div class="grade-badge grade-b">B</div>
@@ -205,7 +200,7 @@
     <div class="factor-info">
       <div class="factor-name">6. Inquiries</div>
       <div class="factor-value">2 total — JPMCB (Oct 2025), AMEX (Nov 2023)</div>
-      <div class="factor-note">Very low. AMEX inquiry falling off Dec 2025. Plenty of runway.</div>
+      <div class="factor-note">Very low. AMEX falling off Dec 2025. Plenty of runway for applications.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -213,8 +208,7 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">7. Collections / Charge-offs</div>
-      <div class="factor-value">0</div>
-      <div class="factor-note">Clean. No collection accounts reported.</div>
+      <div class="factor-value">0 — Clean</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -222,8 +216,7 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">8. Bankruptcies</div>
-      <div class="factor-value">0</div>
-      <div class="factor-note">Clean. No public records reported.</div>
+      <div class="factor-value">0 — Clean</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -231,19 +224,22 @@
 
 <div class="card">
   <div class="section-title">
-    <div class="icon" style="background: #eef2ff; color: #4f46e5;">$</div>
-    Per-Card Utilization
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">&#128179;</div>
+    Per-Card Utilization (Own Revolving)
   </div>
   <table>
     <thead>
-      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+      <tr><th>Account</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
     </thead>
     <tbody>
-      <tr><td>Apple Card (GS Bank)</td><td>Credit Card</td><td>$715</td><td>$10,000</td><td class="text-green">7%</td></tr>
-      <tr><td>Discover</td><td>Credit Card</td><td>$0</td><td>$4,000</td><td class="text-green">0%</td></tr>
-      <tr><td>Capital One / Neiman Marcus</td><td>Charge Card</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Apple Card (GS Bank)</td><td>$715</td><td>$10,000</td><td class="text-green">7%</td></tr>
+      <tr><td>Discover</td><td>$0</td><td>$4,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Capital One / Neiman Marcus</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td></tr>
     </tbody>
   </table>
+  <div style="margin-top: 14px; padding: 12px 14px; background: #f0fdf4; border-radius: 8px; font-size: 12px; color: #166534; border: 1px solid #bbf7d0;">
+    <strong>All cards at or near zero.</strong> Total revolving utilization: $715 / $19,000 = 4%. Ideal.
+  </div>
 </div>
 
 <div class="card">
@@ -259,8 +255,8 @@
     </div>
     <div class="noted-item">
       <div class="label">DTI (Debt to Income)</div>
-      <div class="val">$842/mo</div>
-      <div class="detail">Auto $618 + Student loans $199 + Cards $25</div>
+      <div class="val">~$842/mo</div>
+      <div class="detail">Auto $618 + Student loans $199 + Cards $25. Income unknown.</div>
     </div>
     <div class="noted-item">
       <div class="label">Account Velocity (Last 6 Months)</div>
@@ -269,125 +265,95 @@
     </div>
     <div class="noted-item">
       <div class="label">Account Velocity (6-24 Months)</div>
-      <div class="val">3 new accounts</div>
+      <div class="val">3 accounts</div>
       <div class="detail">Discover (Mar 2023), Cap One/Neiman Marcus (May 2023), WFBNA Auto (Aug 2022).</div>
     </div>
     <div class="noted-item">
       <div class="label">Card Breakdown</div>
-      <div class="val">2 unsecured / 1 charge / 0 AU</div>
-      <div class="detail">0 secured cards. Charge card = Cap One/Neiman Marcus.</div>
+      <div class="val">2 own / 1 charge / 0 AU</div>
+      <div class="detail">Cap One/Neiman Marcus is a charge card. Apple Card + Discover are own unsecured.</div>
     </div>
     <div class="noted-item">
       <div class="label">HELOC</div>
       <div class="val">None</div>
-      <div class="detail">No home equity lines of credit on file.</div>
-    </div>
-    <div class="noted-item">
-      <div class="label">Pending Inquiry</div>
-      <div class="val">Chase (Oct 8, 2025)</div>
-      <div class="detail">No resulting account yet. May be pending approval or recently denied.</div>
-    </div>
-    <div class="noted-item wide">
-      <div class="label">Student Loans (11 Federal — Dept of Ed / AidVantage)</div>
-      <div class="val">$89,894 total balance / $199 combined monthly</div>
-      <div class="detail">All installment — does not affect revolving utilization. Balances exceed originals due to interest capitalization. Experian flags 0% principal paid as "hurting" score. All current, never late. 240-month terms (20 years), opened 2008-2015.</div>
     </div>
   </div>
 </div>
 
 <div class="card">
   <div class="section-title">
-    <div class="icon" style="background: #f0fdf4; color: #16a34a;">&#10003;</div>
-    What's Working Well
-  </div>
-  <div class="strengths-list">
-    <div class="strength-item">
-      <div class="strength-label">Credit Score</div>
-      799 — 1 point from Exceptional tier
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Utilization</div>
-      4% — below FICO High Achiever average
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Payment History</div>
-      Zero missed payments across 15 accounts
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Credit Age</div>
-      Nearly 10-year average, 17-year oldest
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Derogatory Marks</div>
-      Zero collections, zero bankruptcies, zero public records
-    </div>
-    <div class="strength-item">
-      <div class="strength-label">Inquiries</div>
-      Only 2 total — massive runway for applications
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="section-title">
-    <div class="icon" style="background: #f0fdf4; color: #16a34a;">&#9889;</div>
+    <div class="icon" style="background: #eff6ff; color: #3b82f6;">&#9889;</div>
     Next Steps
   </div>
 
-  <div class="solution-step priority-1">
-    <div class="step-label">Next Step</div>
-    <div class="step-title">Proceed with funding</div>
-    <div class="step-detail">799 score, 4% utilization, zero derogatory marks, 10-year credit age, only 2 inquiries. This is one of the cleanest profiles you'll see.</div>
+  <div class="solution-step priority-go">
+    <div class="step-label">Step 1 — Proceed with Funding</div>
+    <div class="step-title">799 score, 4% utilization, zero derogatory marks, only 2 inquiries</div>
+    <div class="step-detail">
+      One of the cleanest profiles you'll see. 10-year credit age, perfect payment history, massive inquiry runway. Ready to go.
+    </div>
   </div>
 
   <div class="solution-step priority-note">
-    <div class="step-label">Banking Relationships Visible on Report</div>
-    <div class="step-title">Wells Fargo (auto loan), Goldman Sachs / Apple Card, Discover, Capital One</div>
-    <div class="step-detail">These are the banking relationships we can see from the credit report. Chase inquiry Oct 8 — no resulting account yet.</div>
-  </div>
-
-  <div class="solution-step priority-note">
-    <div class="step-label">Note — Student Loans</div>
-    <div class="step-title">$89,894 in federal student loans — informational only</div>
-    <div class="step-detail">These are installment loans, not revolving. They don't affect utilization. The $199/mo combined payment is low relative to the balances. All current. Experian flags 0% principal paydown as a negative factor — this is why the score is 799 instead of 820+. No action needed for stacking purposes.</div>
+    <div class="step-label">Other Useful Notes</div>
+    <div class="step-detail">
+      <strong>Student loans ($89,894 federal):</strong> 11 Dept of Ed / AidVantage loans, all current, never late. $199/mo combined payment. Installment debt — does not affect revolving utilization. Balances exceed originals due to interest capitalization. Experian flags 0% principal paydown as hurting the score — this is why it's 799 instead of 820+.<br><br>
+      <strong>Chase inquiry (Oct 8, 2025):</strong> No resulting account yet. May be pending approval or recently denied. Either way, only 2 total inquiries — no concern.
+    </div>
   </div>
 </div>
 
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
-    Full Account Inventory (15 Open + 3 Closed)
+    Full Account Inventory
   </div>
   <table>
     <thead>
-      <tr><th>Account</th><th>Type</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
     </thead>
     <tbody>
-      <tr><td>Apple Card</td><td>Credit Card</td><td>Jul 2025</td><td>$715</td><td>$10,000</td><td>$25/mo</td><td>Never Late</td></tr>
-      <tr><td>Cap One / Neiman</td><td>Charge Card</td><td>May 2023</td><td>$0</td><td>$5,000</td><td>$0</td><td>Never Late</td></tr>
-      <tr><td>Discover</td><td>Credit Card</td><td>Mar 2023</td><td>$0</td><td>$4,000</td><td>$0</td><td>Never Late</td></tr>
-      <tr><td>WFBNA Auto</td><td>Auto Loan</td><td>Aug 2022</td><td>$17,763</td><td>$33,561</td><td>$618/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #1</td><td>Education</td><td>Aug 2015</td><td>$21,222</td><td>$15,691</td><td>$48/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #2</td><td>Education</td><td>Aug 2014</td><td>$29,921</td><td>$20,500</td><td>$66/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #3</td><td>Education</td><td>Aug 2012</td><td>$5,903</td><td>$5,500</td><td>$15/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #4</td><td>Education</td><td>Aug 2012</td><td>$3,425</td><td>$2,000</td><td>$7/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #5</td><td>Education</td><td>Aug 2011</td><td>$5,804</td><td>$5,500</td><td>$14/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #6</td><td>Education</td><td>Aug 2011</td><td>$3,636</td><td>$2,000</td><td>$7/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #7</td><td>Education</td><td>Jan 2011</td><td>$2,459</td><td>$2,250</td><td>$6/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #8</td><td>Education</td><td>Jan 2011</td><td>$1,860</td><td>$1,000</td><td>$3/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #9</td><td>Education</td><td>Feb 2010</td><td>$5,275</td><td>$2,750</td><td>$11/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #10</td><td>Education</td><td>Sep 2009</td><td>$6,407</td><td>$3,250</td><td>$13/mo</td><td>Never Late</td></tr>
-      <tr><td>Student Loan #11</td><td>Education</td><td>Nov 2008</td><td>$3,982</td><td>$3,500</td><td>$9/mo</td><td>Never Late</td></tr>
-      <tr style="color: #94a3b8;"><td>AMEX (closed)</td><td>Credit Card</td><td>Nov 2023</td><td>—</td><td>$10,000</td><td>—</td><td>Closed by consumer</td></tr>
-      <tr style="color: #94a3b8;"><td>Comenity/Eddie Bauer (closed)</td><td>Charge Card</td><td>Feb 2016</td><td>—</td><td>$500</td><td>—</td><td>Closed by grantor</td></tr>
-      <tr style="color: #94a3b8;"><td>Foursight Capital (closed)</td><td>Auto Loan</td><td>Jun 2022</td><td>—</td><td>$25,143</td><td>—</td><td>Paid/Closed</td></tr>
+      <!-- Credit Cards -->
+      <tr class="category-header cat-cards"><td colspan="6">Credit Cards</td></tr>
+      <tr><td>Apple Card (GS Bank)</td><td>Jul 2025</td><td>$715</td><td>$10,000</td><td>$25/mo</td><td>Own</td></tr>
+      <tr><td>Discover</td><td>Mar 2023</td><td>$0</td><td>$4,000</td><td>$0</td><td>Own</td></tr>
+      <tr><td>Cap One / Neiman Marcus</td><td>May 2023</td><td>$0</td><td>$5,000</td><td>$0</td><td>Charge card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>AMEX</td><td>Nov 2023</td><td>—</td><td>$10,000</td><td>—</td><td>Closed (consumer)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Comenity/Eddie Bauer</td><td>Feb 2016</td><td>—</td><td>$500</td><td>—</td><td>Closed (grantor)</td></tr>
+
+      <!-- Auto Loans -->
+      <tr class="category-header cat-auto"><td colspan="6">Auto Loans</td></tr>
+      <tr><td>WFBNA Auto</td><td>Aug 2022</td><td>$17,763</td><td>$33,561</td><td>$618/mo</td><td>Own</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Foursight Capital</td><td>Jun 2022</td><td>—</td><td>$25,143</td><td>—</td><td>Closed/Paid</td></tr>
+
+      <!-- Student Loans -->
+      <tr class="category-header cat-student"><td colspan="6">Student Loans (11 Federal)</td></tr>
+      <tr><td>Dept of Ed #1</td><td>Aug 2015</td><td>$21,222</td><td>$15,691</td><td>$48/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #2</td><td>Aug 2014</td><td>$29,921</td><td>$20,500</td><td>$66/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #3</td><td>Aug 2012</td><td>$5,903</td><td>$5,500</td><td>$15/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #4</td><td>Aug 2012</td><td>$3,425</td><td>$2,000</td><td>$7/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #5</td><td>Aug 2011</td><td>$5,804</td><td>$5,500</td><td>$14/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #6</td><td>Aug 2011</td><td>$3,636</td><td>$2,000</td><td>$7/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #7</td><td>Jan 2011</td><td>$2,459</td><td>$2,250</td><td>$6/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #8</td><td>Jan 2011</td><td>$1,860</td><td>$1,000</td><td>$3/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #9</td><td>Feb 2010</td><td>$5,275</td><td>$2,750</td><td>$11/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #10</td><td>Sep 2009</td><td>$6,407</td><td>$3,250</td><td>$13/mo</td><td>Own</td></tr>
+      <tr><td>Dept of Ed #11</td><td>Nov 2008</td><td>$3,982</td><td>$3,500</td><td>$9/mo</td><td>Own</td></tr>
     </tbody>
   </table>
 </div>
 
+<div class="bottom-line grade-outlook-go">
+  <strong>Proceed with funding.</strong> Near-perfect A- profile — 799 score, 4% utilization, perfect payment history, zero derogatory marks, and only 2 inquiries. One of the cleanest reports we've seen.
+</div>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
+</div>
+
 <div class="footer">
   <div class="logo">Huge Capital</div>
-  AI Credit Grading System &middot; 8-Factor Analysis &middot; Majority-Based Grading
+  AI Credit Grading System &middot; 8-Factor Analysis
 </div>
 
 </body>
