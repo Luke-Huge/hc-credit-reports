@@ -123,6 +123,7 @@
   .cat-student td { background: #ede9fe !important; color: #5b21b6; border-left: 4px solid #8b5cf6; }
   .cat-other td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
   .cat-collection td { background: #fee2e2 !important; color: #991b1b; border-left: 4px solid #dc2626; }
+  .cat-closed td { background: #f1f5f9 !important; color: #64748b; border-left: 4px solid #cbd5e1; }
 
   .disclaimer {
     margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
@@ -362,7 +363,7 @@
       <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
     </thead>
     <tbody>
-      <!-- Credit Cards -->
+      <!-- Credit Cards (Open) -->
       <tr class="category-header cat-cards"><td colspan="6">Credit Cards</td></tr>
       <tr><td>Capital One</td><td>Jan 2023</td><td class="text-red">$7,238</td><td>$11,500</td><td>$240/mo</td><td>Own</td></tr>
       <tr><td>Citicards CBNA</td><td>Feb 2020</td><td class="text-red">$5,601</td><td>$16,120</td><td>$122/mo</td><td>Own</td></tr>
@@ -372,45 +373,45 @@
       <tr><td>Barclays</td><td>Aug 2017</td><td>$99</td><td>$250</td><td>—</td><td>Own</td></tr>
       <tr><td>AMEX</td><td>Dec 2024</td><td>$1,237</td><td>—</td><td>—</td><td>Charge card</td></tr>
       <tr><td>JPMCB Card</td><td>Dec 2021</td><td>$0</td><td>$16,000</td><td>$0</td><td>AU</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Jul 2017</td><td>$4,948</td><td>$20,400</td><td>$188/mo</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Sep 2021</td><td>$2,669</td><td>$24,000</td><td>$124/mo</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Nov 2018</td><td>—</td><td>$25,900</td><td>—</td><td>Closed/Paid</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>AMEX</td><td>Aug 2014</td><td>—</td><td>$9,100</td><td>—</td><td>Closed (inactivity)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Bank of America</td><td>Oct 2015</td><td>—</td><td>$13,000</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Bank of America</td><td>Sep 2013</td><td>—</td><td>$15,000</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Best Buy/CBNA</td><td>Feb 2020</td><td>—</td><td>$6,200</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Capital One</td><td>Sep 2011</td><td>—</td><td>$750</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Comenitybank/Mayors</td><td>Dec 2019</td><td>—</td><td>$23,500</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>ComenityCap/Eldorado</td><td>Feb 2018</td><td>—</td><td>$11,500</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>ComenityCB/Petland</td><td>Jul 2013</td><td>—</td><td>$1,160</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Discover</td><td>Apr 2021</td><td>—</td><td>$13,000</td><td>—</td><td>Closed (1 late)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/Care Credit</td><td>Aug 2017</td><td>—</td><td>$2,500</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/NTWK</td><td>Feb 2017</td><td>—</td><td>$3,500</td><td>—</td><td>Closed</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>WFBNA Card</td><td>Jun 2015</td><td>—</td><td>$3,900</td><td>—</td><td>Closed</td></tr>
 
-      <!-- Auto -->
+      <!-- Auto (Open) -->
       <tr class="category-header cat-auto"><td colspan="6">Auto Loans / Leases</td></tr>
       <tr><td>GM Financial</td><td>Jul 2025</td><td>$24,179</td><td>$26,242</td><td>$779/mo</td><td>Lease (Joint)</td></tr>
       <tr><td>Ally Financial</td><td>Feb 2022</td><td>$1,797</td><td>$23,395</td><td>$0</td><td>Lease</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>BMW Financial (Lease)</td><td>Mar 2021</td><td>—</td><td>$28,647</td><td>—</td><td>Closed (early term)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>BMW Financial (Loan)</td><td>Apr 2017</td><td>—</td><td>$38,956</td><td>—</td><td>Closed (insurance)</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Lexus Financial</td><td>Dec 2016</td><td>—</td><td>$22,457</td><td>—</td><td>Closed/Paid</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>Lexus Financial</td><td>Oct 2014</td><td>—</td><td>$10,927</td><td>—</td><td>Closed/Paid</td></tr>
 
-      <!-- Personal Loans -->
+      <!-- Personal Loans (Open) -->
       <tr class="category-header cat-personal"><td colspan="6">Personal Loans</td></tr>
       <tr><td>Lending Club Corp</td><td>Feb 2023</td><td>$1,509</td><td>$12,000</td><td>$376/mo</td><td>Own (87% paid)</td></tr>
-
-      <!-- Student Loans -->
-      <tr class="category-header cat-student"><td colspan="6">Student Loans</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>SLOAN/NELN</td><td>Aug 2008</td><td>—</td><td>$3,500</td><td>—</td><td>Closed/Paid</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>US Dept of Ed/GLELSI</td><td>Nov 2011</td><td>—</td><td>$15,000</td><td>—</td><td>Closed/Paid</td></tr>
-      <tr style="color: #94a3b8; font-style: italic;"><td>US Dept of Ed/GLELSI</td><td>Aug 2009</td><td>—</td><td>$1,750</td><td>—</td><td>Closed/Paid</td></tr>
 
       <!-- Charge-Off / Collection -->
       <tr class="category-header cat-collection"><td colspan="6">Charge-Off / Collection</td></tr>
       <tr><td><strong>JPMCB Card (Business)</strong></td><td>May 2023</td><td class="text-red">$11,795 CO</td><td>$10,000</td><td class="text-red">$11,456 past due</td><td class="text-red">Charge-Off</td></tr>
       <tr><td>Credit Counsel Inc (Tower Club)</td><td>Jan 2024</td><td>$0</td><td>$2,337 orig</td><td>—</td><td>Paid in settlement</td></tr>
+
+      <!-- Closed Accounts -->
+      <tr class="category-header cat-closed"><td colspan="6">Closed Accounts</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Jul 2017</td><td>$4,948</td><td>$20,400</td><td>$188/mo</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Sep 2021</td><td>$2,669</td><td>$24,000</td><td>$124/mo</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Card</td><td>Nov 2018</td><td>—</td><td>$25,900</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>AMEX</td><td>Aug 2014</td><td>—</td><td>$9,100</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Bank of America</td><td>Oct 2015</td><td>—</td><td>$13,000</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Bank of America</td><td>Sep 2013</td><td>—</td><td>$15,000</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Best Buy/CBNA</td><td>Feb 2020</td><td>—</td><td>$6,200</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Capital One</td><td>Sep 2011</td><td>—</td><td>$750</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Comenitybank/Mayors</td><td>Dec 2019</td><td>—</td><td>$23,500</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>ComenityCap/Eldorado</td><td>Feb 2018</td><td>—</td><td>$11,500</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>ComenityCB/Petland</td><td>Jul 2013</td><td>—</td><td>$1,160</td><td>—</td><td>Credit Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Discover</td><td>Apr 2021</td><td>—</td><td>$13,000</td><td>—</td><td>Credit Card (1 late)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/Care Credit</td><td>Aug 2017</td><td>—</td><td>$2,500</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SYNCB/NTWK</td><td>Feb 2017</td><td>—</td><td>$3,500</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>WFBNA Card</td><td>Jun 2015</td><td>—</td><td>$3,900</td><td>—</td><td>Charge Card</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>BMW Financial</td><td>Mar 2021</td><td>—</td><td>$28,647</td><td>—</td><td>Auto Lease</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>BMW Financial</td><td>Apr 2017</td><td>—</td><td>$38,956</td><td>—</td><td>Auto Loan</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Lexus Financial</td><td>Dec 2016</td><td>—</td><td>$22,457</td><td>—</td><td>Auto Lease</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Lexus Financial</td><td>Oct 2014</td><td>—</td><td>$10,927</td><td>—</td><td>Auto Lease</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>SLOAN/NELN</td><td>Aug 2008</td><td>—</td><td>$3,500</td><td>—</td><td>Student Loan</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>US Dept of Ed/GLELSI</td><td>Nov 2011</td><td>—</td><td>$15,000</td><td>—</td><td>Student Loan</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>US Dept of Ed/GLELSI</td><td>Aug 2009</td><td>—</td><td>$1,750</td><td>—</td><td>Student Loan</td></tr>
     </tbody>
   </table>
 </div>
