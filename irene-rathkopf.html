@@ -34,10 +34,10 @@
 
   .overall-grade {
     text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
-    border: 2px solid #dc2626; background: #fef2f2;
+    border: 2px solid #047857; background: #ecfdf5;
   }
   .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
-  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #dc2626; line-height: 1; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #047857; line-height: 1; }
   .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
   .card {
@@ -54,10 +54,14 @@
 
   .factor-row {
     display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+    cursor: default;
   }
   .factor-row:last-child { border-bottom: none; }
+  .factor-row.clickable { cursor: pointer; }
+  .factor-row.clickable:hover { background: #f8fafc; border-radius: 8px; margin: 0 -8px; padding: 14px 8px; }
   .factor-info { flex: 1; }
   .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-name .click-hint { font-size: 11px; font-weight: 500; color: #6366f1; margin-left: 6px; }
   .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
   .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
 
@@ -109,8 +113,11 @@
     text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
     font-size: 14px; font-weight: 600; line-height: 1.7;
   }
-  .bottom-line.grade-outlook-fix {
-    background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+  .bottom-line.grade-outlook-good {
+    background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46;
+  }
+  .bottom-line.grade-outlook-patient {
+    background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
   }
 
   .category-header td {
@@ -128,6 +135,34 @@
 
   .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
   .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+
+  /* Popup overlay for clickable factors */
+  .popup-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+  }
+  .popup-overlay.active { display: flex; }
+  .popup-content {
+    background: #fff; border-radius: 14px; padding: 28px; max-width: 700px; width: 90%;
+    max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .popup-close {
+    position: absolute; top: 12px; right: 16px; font-size: 20px; cursor: pointer;
+    color: #94a3b8; font-weight: 700; border: none; background: none; padding: 4px 8px;
+  }
+  .popup-close:hover { color: #1a1a2e; }
+  .popup-title { font-size: 18px; font-weight: 800; color: #1a1a2e; margin-bottom: 16px; }
+  .popup-summary {
+    display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .popup-stat {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; flex: 1; min-width: 120px;
+  }
+  .popup-stat .ps-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .popup-stat .ps-val { font-size: 22px; font-weight: 800; color: #1a1a2e; margin-top: 2px; }
+  .disputable-yes { color: #16a34a; }
+  .disputable-no { color: #dc2626; }
 </style>
 </head>
 <body>
@@ -145,9 +180,9 @@
 
 <div class="overall-grade">
   <div class="label">Overall Grade</div>
-  <div class="grade">F</div>
-  <div class="meaning" style="font-weight: 700; font-size: 16px; color: #991b1b; margin-bottom: 10px;">Soft F &mdash; Pay down utilization with cash. If cash is not available, apply for personal loan to pay down balances.</div>
-  <div class="meaning">Utilization is at 58% &mdash; that's the only reason for the F. Everything else is A-level: 24-year credit history, zero late payments, zero collections, zero bankruptcies, 7 own cards with 2 anchor cards ($17.5K + $15.7K), and a paid-off mortgage. Fix utilization and this becomes an A- profile.</div>
+  <div class="grade">B</div>
+  <div class="meaning" style="font-weight: 700; font-size: 16px; color: #065f46; margin-bottom: 10px;">Solid client &mdash; can proceed with funding.</div>
+  <div class="meaning">6 out of 8 factors are A-level: 24-year credit history, zero late payments, zero collections, zero bankruptcies, 7 own cards with 2 anchor cards ($17.5K + $15.7K), and a paid-off mortgage. Utilization is the main drag &mdash; 4 cards are near-maxed while 4 sit at $0, averaging to a C. Paying down the high cards would push this to an A- profile with a projected 780+ score.</div>
 </div>
 
 <div class="card">
@@ -159,26 +194,24 @@
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">1. Credit Score</div>
-      <div class="factor-value">725 &mdash; Above 700 threshold</div>
-      <div class="factor-note">Held back almost entirely by utilization. With perfect payment history and 24-year age, score should reach 780+ once balances are resolved.</div>
+      <div class="factor-value">725 &mdash; Falls in the 720-739 range</div>
     </div>
-    <div class="grade-badge grade-b">B-</div>
+    <div class="grade-badge grade-b">B</div>
   </div>
 
-  <div class="factor-row">
+  <div class="factor-row clickable" onclick="document.getElementById('popup-utilization').classList.add('active')">
     <div class="factor-info">
-      <div class="factor-name">2. Utilization (Own Revolving)</div>
-      <div class="factor-value">58% &mdash; $39,088 used / $67,850 total revolving limits</div>
-      <div class="factor-note">Three cards near max: AMEX 92%, Citi 93%, Cap One Biz 80%. Four other cards at $0 balance.</div>
+      <div class="factor-name">2. Utilization (Per-Card GPA) <span class="click-hint">&#9432; Click for detail</span></div>
+      <div class="factor-value">Per-card GPA: 2.0 &mdash; 4 cards at F, 4 cards at A</div>
+      <div class="factor-note">4 cards near max (Citi 93%, AMEX 92%, Cap One Biz 80%, Comenity 64%) offset by 4 cards at 0%.</div>
     </div>
-    <div class="grade-badge grade-f">F</div>
+    <div class="grade-badge grade-c">C</div>
   </div>
 
   <div class="factor-row">
     <div class="factor-info">
       <div class="factor-name">3. Late Payments</div>
       <div class="factor-value">0 &mdash; Zero late payments across all accounts, ever</div>
-      <div class="factor-note">Perfect payment history on 14+ accounts spanning 24 years.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -187,7 +220,6 @@
     <div class="factor-info">
       <div class="factor-name">4. Credit Age</div>
       <div class="factor-value">11 yrs 4 mos average / oldest account 24 yrs</div>
-      <div class="factor-note">M&amp;T Bank LOC opened Mar 2002. Exceptionally deep credit history.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
@@ -196,16 +228,14 @@
     <div class="factor-info">
       <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
       <div class="factor-value">7 own cards &mdash; 2 anchor cards at $10K+ (Citi $17.5K, AMEX $15.7K)</div>
-      <div class="factor-note">Strong card profile. Also has Cap One Biz $8K, Lowes $6.6K, THD $5K, Comenity $2.5K, Cap One $2.5K.</div>
     </div>
     <div class="grade-badge grade-a">A</div>
   </div>
 
-  <div class="factor-row">
+  <div class="factor-row clickable" onclick="document.getElementById('popup-inquiries').classList.add('active')">
     <div class="factor-info">
-      <div class="factor-name">6. Inquiries</div>
-      <div class="factor-value">6 total &mdash; all auto-shopping related</div>
-      <div class="factor-note">Sep 2025 cluster (5 inquiries) counts as 1 for FICO scoring (auto shopping window). Plus 1 in Feb 2026. All 6 are disputable &mdash; no auto account was opened.</div>
+      <div class="factor-name">6. Inquiries <span class="click-hint">&#9432; Click for detail</span></div>
+      <div class="factor-value">6 total &mdash; all auto-shopping related, all disputable</div>
     </div>
     <div class="grade-badge grade-c">C</div>
   </div>
@@ -227,6 +257,7 @@
   </div>
 </div>
 
+<!-- Per-Card Utilization with individual grades -->
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #eef2ff; color: #4f46e5;">&#128179;</div>
@@ -234,24 +265,26 @@
   </div>
   <table>
     <thead>
-      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th><th>Grade</th></tr>
     </thead>
     <tbody>
-      <tr><td>Citi TY MC</td><td>Credit Card</td><td>$16,438</td><td>$17,550</td><td class="text-red">93%</td></tr>
-      <tr><td>AMEX</td><td>Credit Card</td><td>$14,583</td><td>$15,700</td><td class="text-red">92%</td></tr>
-      <tr><td>Capital One (Biz)</td><td>Business Card</td><td>$6,457</td><td>$8,000</td><td class="text-red">80%</td></tr>
-      <tr><td>Comenity/SmileGenFin</td><td>Charge Card</td><td>$1,610</td><td>$2,500</td><td class="text-amber">64%</td></tr>
-      <tr><td>Capital One</td><td>Credit Card</td><td>$0</td><td>$2,500</td><td class="text-green">0%</td></tr>
-      <tr><td>SYNCB/Lowes</td><td>Charge Card</td><td>$0</td><td>$6,600</td><td class="text-green">0%</td></tr>
-      <tr><td>THD/CBNA</td><td>Charge Card</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td></tr>
-      <tr><td>M&amp;T Bank</td><td>Line of Credit</td><td>$0</td><td>$10,000</td><td class="text-green">0%</td></tr>
+      <tr><td>Citi TY MC</td><td>Credit Card</td><td>$16,438</td><td>$17,550</td><td class="text-red">93%</td><td><span class="grade-badge grade-f" style="font-size:12px; padding:3px 10px;">F</span></td></tr>
+      <tr><td>AMEX</td><td>Credit Card</td><td>$14,583</td><td>$15,700</td><td class="text-red">92%</td><td><span class="grade-badge grade-f" style="font-size:12px; padding:3px 10px;">F</span></td></tr>
+      <tr><td>Capital One (Biz)</td><td>Business Card</td><td>$6,457</td><td>$8,000</td><td class="text-red">80%</td><td><span class="grade-badge grade-f" style="font-size:12px; padding:3px 10px;">F</span></td></tr>
+      <tr><td>Comenity/SmileGenFin</td><td>Charge Card</td><td>$1,610</td><td>$2,500</td><td class="text-amber">64%</td><td><span class="grade-badge grade-f" style="font-size:12px; padding:3px 10px;">F</span></td></tr>
+      <tr><td>Capital One</td><td>Credit Card</td><td>$0</td><td>$2,500</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:12px; padding:3px 10px;">A</span></td></tr>
+      <tr><td>SYNCB/Lowes</td><td>Charge Card</td><td>$0</td><td>$6,600</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:12px; padding:3px 10px;">A</span></td></tr>
+      <tr><td>THD/CBNA</td><td>Charge Card</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:12px; padding:3px 10px;">A</span></td></tr>
+      <tr><td>M&amp;T Bank</td><td>Line of Credit</td><td>$0</td><td>$10,000</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:12px; padding:3px 10px;">A</span></td></tr>
     </tbody>
   </table>
-  <div style="margin-top: 14px; padding: 12px 14px; background: #fef2f2; border-radius: 8px; font-size: 12px; color: #991b1b; border: 1px solid #fecaca;">
-    <strong>~$39K concentrated on 3 cards.</strong> The top 3 cards (Citi, AMEX, Cap One Biz) carry $37,478 combined. Four other cards and the LOC sit at $0. Paying down or consolidating ~$35K would drop total utilization from 58% to under 10%.
+  <div style="margin-top: 14px; padding: 12px 14px; background: #fef9c3; border-radius: 8px; font-size: 12px; color: #92400e; border: 1px solid #fde68a;">
+    <strong>GPA Calculation:</strong> F(0) + F(0) + F(0) + F(0) + A(4) + A(4) + A(4) + A(4) = 16 &divide; 8 = <strong>2.0 &rarr; C</strong><br>
+    4 cards carry $39,088 combined while 4 sit at $0. Paying down ~$35K across the top 3 cards would flip all 4 F's to A's, moving the factor to A (4.0 GPA).
   </div>
 </div>
 
+<!-- Next Steps -->
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #eff6ff; color: #3b82f6;">&#9889;</div>
@@ -259,13 +292,13 @@
   </div>
 
   <div class="solution-step priority-1">
-    <div class="step-label">Step 1 &mdash; Pay Down or Consolidate the Top 3 Cards (Critical)</div>
+    <div class="step-label">Step 1 &mdash; Pay Down the Top 3 Cards</div>
     <div class="step-title">Reduce ~$37,478 across Citi, AMEX, and Cap One Biz</div>
     <div class="step-detail">
       <strong>Citi:</strong> $16,438 &rarr; under $1,755 (10% of $17,550)<br>
       <strong>AMEX:</strong> $14,583 &rarr; under $1,570 (10% of $15,700)<br>
       <strong>Cap One Biz:</strong> $6,457 &rarr; under $800 (10% of $8,000)<br><br>
-      Total paydown needed: ~$35K. If a lump-sum paydown isn't feasible, a personal loan to consolidate revolving debt would drop utilization immediately while converting the debt to an installment loan (which doesn't count toward revolving utilization). The CSM can discuss options.
+      Total paydown needed: ~$35K. If cash isn't available, a personal loan to consolidate revolving debt would drop utilization immediately while converting the debt to an installment loan (doesn't count toward revolving utilization). The CSM can discuss options.
     </div>
   </div>
 
@@ -273,34 +306,28 @@
     <div class="step-label">Step 2 &mdash; Pay Down Comenity/SmileGenFin</div>
     <div class="step-title">Reduce $1,610 to under $250</div>
     <div class="step-detail">
-      At 64% usage on a $2,500 limit, this smaller card still contributes to the utilization problem. Target: under $250 (10%).
+      At 64% usage on a $2,500 limit, this card is also an F. Target: under $250 (10%) to flip it to A.
     </div>
   </div>
 
   <div class="solution-step priority-3">
     <div class="step-label">Step 3 &mdash; Dispute All 6 Auto Inquiries</div>
-    <div class="step-title">All inquiries are auto-shopping with no account opened</div>
+    <div class="step-title">All 6 are disputable &mdash; no account opened within 30 days</div>
     <div class="step-detail">
-      <strong>All disputable (no open accounts):</strong><br>
-      &bull; Transportation Alliance &mdash; Feb 13, 2026<br>
-      &bull; 700/Centennial Hyundai &mdash; Sep 23, 2025<br>
-      &bull; Hyundai Capital America &mdash; Sep 23, 2025 (x2)<br>
-      &bull; JPMCB Auto &mdash; Sep 20, 2025<br>
-      &bull; Transportation Alliance &mdash; Sep 8, 2025<br><br>
-      None of these resulted in an open account. All can be disputed. Removing them would drop inquiries from 6 to 0.
+      Removing all 6 would drop inquiries from C (6 total) to A (0 total). See the Inquiry Detail Breakdown for full list.
     </div>
   </div>
 
   <div class="solution-step priority-note">
     <div class="step-label">Other Useful Notes</div>
     <div class="step-detail">
-      <strong>Consumer Statement on Sears:</strong> Closed Sears/CBNA card has a consumer statement noting &ldquo;delinquency due to extended unemployment.&rdquo; This is on a closed account with no balance and no reported lates &mdash; it has no scoring impact.<br><br>
-      <strong>Retired Status:</strong> Employer listed as &ldquo;Retired.&rdquo; Income verification will be needed for any personal loan or consolidation strategy. Retirement income, Social Security, pensions, or investment income all count.<br><br>
-      <strong>Card Profile Strength:</strong> With 2 anchor cards ($17.5K Citi + $15.7K AMEX), 7 total own cards, and 24 years of history, the card profile is already stacking-ready. Once utilization is resolved, no additional card building is needed.
+      <strong>Consumer Statement on Sears:</strong> Closed Sears/CBNA card has a consumer statement noting &ldquo;delinquency due to extended unemployment.&rdquo; This is on a closed account with no balance and no reported lates &mdash; no scoring impact.<br><br>
+      <strong>Retired Status:</strong> Employer listed as &ldquo;Retired.&rdquo; Income verification will be needed for any personal loan or consolidation strategy. Retirement income, Social Security, pensions, or investment income all count.
     </div>
   </div>
 </div>
 
+<!-- Noted Items -->
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #f1f5f9; color: #64748b;">i</div>
@@ -318,33 +345,34 @@
       <div class="detail">AMEX $520 + Citi $428 + Cap One Biz $193 + Comenity $64. Retired &mdash; income not reported.</div>
     </div>
     <div class="noted-item">
-      <div class="label">Account Velocity (Last 6 Months)</div>
-      <div class="val">0 new accounts</div>
-      <div class="detail">No new accounts opened. Clean velocity.</div>
+      <div class="label">5/24 Rule &mdash; Personal Cards</div>
+      <div class="val">1 / 5</div>
+      <div class="detail">THD/CBNA opened Jun 2023. Under the 5/24 threshold &mdash; Chase is available.</div>
     </div>
     <div class="noted-item">
-      <div class="label">Account Velocity (6-24 Months)</div>
-      <div class="val">0 accounts</div>
-      <div class="detail">Most recent open account: THD/CBNA (Jun 2023), which is outside the 24-month window.</div>
+      <div class="label">5/24 Rule &mdash; Personal Loans</div>
+      <div class="val">0 in last 24 months</div>
+      <div class="detail">No personal loans opened in the last 24 months.</div>
     </div>
     <div class="noted-item">
       <div class="label">Card Breakdown</div>
       <div class="val">7 own + 1 LOC + 0 AU</div>
-      <div class="detail">Strong diversity: 2 major bank cards (Citi, AMEX), 1 biz card (Cap One), 3 store cards (Lowes, THD, Comenity), 1 personal card (Cap One $2.5K), 1 LOC (M&amp;T).</div>
+      <div class="detail">2 major bank cards (Citi, AMEX), 1 biz card (Cap One), 3 store cards (Lowes, THD, Comenity), 1 personal card (Cap One $2.5K), 1 LOC (M&amp;T).</div>
     </div>
     <div class="noted-item">
       <div class="label">HELOC / LOC</div>
       <div class="val">M&amp;T Bank $10K LOC</div>
-      <div class="detail">Joint, opened Mar 2002. $0 balance. Excluded from utilization grading if HELOC; included if standard LOC &mdash; either way, $0 balance so no impact.</div>
+      <div class="detail">Joint, opened Mar 2002. $0 balance. Included in utilization grading as standard LOC (not HELOC). No impact at $0.</div>
     </div>
     <div class="noted-item wide">
       <div class="label">Mortgage History</div>
       <div class="val">Paid off &mdash; $234,900</div>
-      <div class="detail">Guaranteed Rate originated Jun 2022, transferred to JPMCB Home, paid off Sep 2025. Demonstrates strong borrowing history and asset ownership.</div>
+      <div class="detail">Guaranteed Rate originated Jun 2022, transferred to JPMCB Home, paid off Sep 2025. Strong borrowing history and asset ownership.</div>
     </div>
   </div>
 </div>
 
+<!-- Full Account Inventory -->
 <div class="card">
   <div class="section-title">
     <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
@@ -381,8 +409,12 @@
   </table>
 </div>
 
-<div class="bottom-line grade-outlook-fix">
-  <strong>Soft F &mdash; this is fixable now.</strong> The F is solely from utilization &mdash; 3 near-maxed cards totaling ~$37K. Every other factor is A-level. Pay down with cash or apply for a personal loan to consolidate the revolving debt. Once utilization drops, dispute the 6 auto inquiries, and this transforms into an <strong>A- client</strong> with a projected 780+ score, 24 years of history, perfect payment record, and 2 anchor cards already in place.
+<!-- Bottom Line -->
+<div class="bottom-line grade-outlook-good" style="margin-bottom: 8px;">
+  <strong>Can proceed with funding now.</strong> 6 of 8 factors are A-level. Utilization (C) and Inquiries (C) are the only drags. Expected funding range: $30K&ndash;$70K.
+</div>
+<div class="bottom-line grade-outlook-patient">
+  <strong>Or be patient:</strong> Pay down ~$35K across the top 3 cards (or consolidate with a personal loan), dispute all 6 auto inquiries, and this becomes an <strong>A- client</strong> with a projected 780+ score, 0 inquiries, and all 8 factors at A. Expected range jumps to $100K&ndash;$250K+.
 </div>
 
 <div class="disclaimer">
@@ -392,6 +424,114 @@
 <div class="footer">
   <div class="logo">Huge Capital</div>
   AI Credit Grading System &middot; 8-Factor Analysis
+</div>
+
+<!-- POPUP: Utilization Per-Card Detail -->
+<div id="popup-utilization" class="popup-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="popup-content">
+    <button class="popup-close" onclick="document.getElementById('popup-utilization').classList.remove('active')">&times;</button>
+    <div class="popup-title">Factor 2 &mdash; Utilization Per-Card Breakdown</div>
+    <div class="popup-summary">
+      <div class="popup-stat">
+        <div class="ps-label">Overall Factor Grade</div>
+        <div class="ps-val" style="color: #a16207;">C</div>
+      </div>
+      <div class="popup-stat">
+        <div class="ps-label">GPA Average</div>
+        <div class="ps-val">2.0</div>
+      </div>
+      <div class="popup-stat">
+        <div class="ps-label">Cards at F</div>
+        <div class="ps-val" style="color: #dc2626;">4</div>
+      </div>
+      <div class="popup-stat">
+        <div class="ps-label">Cards at A</div>
+        <div class="ps-val" style="color: #16a34a;">4</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Account</th><th>Balance</th><th>Limit</th><th>Usage</th><th>Grade</th><th>Points</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Citi TY MC</td><td>$16,438</td><td>$17,550</td><td class="text-red">93%</td><td><span class="grade-badge grade-f" style="font-size:11px; padding:2px 8px;">F</span></td><td>0</td></tr>
+        <tr><td>AMEX</td><td>$14,583</td><td>$15,700</td><td class="text-red">92%</td><td><span class="grade-badge grade-f" style="font-size:11px; padding:2px 8px;">F</span></td><td>0</td></tr>
+        <tr><td>Capital One (Biz)</td><td>$6,457</td><td>$8,000</td><td class="text-red">80%</td><td><span class="grade-badge grade-f" style="font-size:11px; padding:2px 8px;">F</span></td><td>0</td></tr>
+        <tr><td>Comenity/SmileGenFin</td><td>$1,610</td><td>$2,500</td><td class="text-amber">64%</td><td><span class="grade-badge grade-f" style="font-size:11px; padding:2px 8px;">F</span></td><td>0</td></tr>
+        <tr><td>Capital One</td><td>$0</td><td>$2,500</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:11px; padding:2px 8px;">A</span></td><td>4</td></tr>
+        <tr><td>SYNCB/Lowes</td><td>$0</td><td>$6,600</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:11px; padding:2px 8px;">A</span></td><td>4</td></tr>
+        <tr><td>THD/CBNA</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:11px; padding:2px 8px;">A</span></td><td>4</td></tr>
+        <tr><td>M&amp;T Bank LOC</td><td>$0</td><td>$10,000</td><td class="text-green">0%</td><td><span class="grade-badge grade-a" style="font-size:11px; padding:2px 8px;">A</span></td><td>4</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top: 14px; padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 13px; color: #4a5568; border: 1px solid #e2e8f0;">
+      <strong>Total Points:</strong> 0+0+0+0+4+4+4+4 = 16<br>
+      <strong>Cards:</strong> 8<br>
+      <strong>GPA:</strong> 16 &divide; 8 = <strong>2.0 &rarr; C</strong>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP: Inquiry Detail Breakdown -->
+<div id="popup-inquiries" class="popup-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="popup-content">
+    <button class="popup-close" onclick="document.getElementById('popup-inquiries').classList.remove('active')">&times;</button>
+    <div class="popup-title">Factor 6 &mdash; Inquiry Detail Breakdown</div>
+    <div class="popup-summary">
+      <div class="popup-stat">
+        <div class="ps-label">Total Inquiries</div>
+        <div class="ps-val">6</div>
+      </div>
+      <div class="popup-stat">
+        <div class="ps-label">Disputable</div>
+        <div class="ps-val disputable-yes">6</div>
+      </div>
+      <div class="popup-stat">
+        <div class="ps-label">Not Disputable</div>
+        <div class="ps-val">0</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Creditor</th><th>Date</th><th>Bureau</th><th>Account within 30 Days?</th><th>Disputable?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Transportation Alliance</td><td>Feb 13, 2026</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+        <tr>
+          <td>700/Centennial Hyundai</td><td>Sep 23, 2025</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+        <tr>
+          <td>Hyundai Capital America</td><td>Sep 23, 2025</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+        <tr>
+          <td>Hyundai Capital America</td><td>Sep 23, 2025</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+        <tr>
+          <td>JPMCB Auto</td><td>Sep 20, 2025</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+        <tr>
+          <td>Transportation Alliance</td><td>Sep 8, 2025</td><td>Experian</td>
+          <td>No &mdash; no account opened</td>
+          <td class="disputable-yes" style="font-weight:700;">&#10003; Yes</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top: 14px; padding: 12px; background: #ecfdf5; border-radius: 8px; font-size: 13px; color: #065f46; border: 1px solid #a7f3d0;">
+      <strong>All 6 inquiries are disputable.</strong> None resulted in an account within 30 days. All are auto-shopping inquiries. The Sep 2025 cluster (5 inquiries) counts as 1 for FICO scoring (auto shopping window). Removing all 6 would move Factor 6 from C to A.
+    </div>
+  </div>
 </div>
 
 </body>
