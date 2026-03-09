@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Report Breakdown — Irene Rathkopf</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: #a0aec0; margin-top: 2px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .header .meta span {
+    font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 14px; border-radius: 8px; color: #e2e8f0;
+  }
+  .header .meta span strong { color: #fff; }
+
+  .overall-grade {
+    text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
+    border: 2px solid #dc2626; background: #fef2f2;
+  }
+  .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #dc2626; line-height: 1; }
+  .overall-grade .meaning { font-size: 15px; color: #44403c; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+  }
+  .section-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  }
+
+  .factor-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-info { flex: 1; }
+  .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
+  .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+  .grade-badge {
+    font-size: 15px; font-weight: 800; padding: 6px 16px; border-radius: 8px;
+    min-width: 40px; text-align: center; flex-shrink: 0; margin-left: 12px;
+  }
+  .grade-a { background: #dcfce7; color: #15803d; }
+  .grade-b { background: #d1fae5; color: #047857; }
+  .grade-c { background: #fef9c3; color: #a16207; }
+  .grade-d { background: #ffedd5; color: #c2410c; }
+  .grade-f { background: #fee2e2; color: #dc2626; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th {
+    text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e2e8f0;
+  }
+  table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: #f8fafc; }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 600; }
+  .text-amber { color: #d97706; font-weight: 600; }
+  .text-muted { color: #94a3b8; }
+
+  .noted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .noted-grid { grid-template-columns: 1fr; } }
+  .noted-item { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+  .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+  .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .noted-item.wide { grid-column: 1 / -1; }
+
+  .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
+  .solution-step.priority-1 { background: #fef2f2; border-color: #dc2626; }
+  .solution-step.priority-2 { background: #fffbeb; border-color: #d97706; }
+  .solution-step.priority-3 { background: #eff6ff; border-color: #3b82f6; }
+  .solution-step.priority-note { background: #f8fafc; border-color: #94a3b8; }
+  .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .solution-step.priority-1 .step-label { color: #dc2626; }
+  .solution-step.priority-2 .step-label { color: #d97706; }
+  .solution-step.priority-3 .step-label { color: #3b82f6; }
+  .solution-step.priority-note .step-label { color: #64748b; }
+  .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  .bottom-line {
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
+  }
+  .bottom-line.grade-outlook-fix {
+    background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+  }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-loc td { background: #ecfdf5 !important; color: #065f46; border-left: 4px solid #10b981; }
+  .cat-closed td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
+
+  .disclaimer {
+    margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; font-size: 11px; color: #64748b; line-height: 1.6;
+  }
+
+  .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Credit Report Breakdown</h1>
+  <div class="subtitle">Huge Capital AI Credit Grading System</div>
+  <div class="meta">
+    <span><strong>Client:</strong> Irene Rathkopf</span>
+    <span><strong>Source:</strong> Experian FICO 8</span>
+    <span><strong>Score:</strong> 725</span>
+    <span><strong>Report:</strong> Mar 9, 2026</span>
+  </div>
+</div>
+
+<div class="overall-grade">
+  <div class="label">Overall Grade</div>
+  <div class="grade">F</div>
+  <div class="meaning">Exceptional foundation &mdash; 24-year credit history, zero late payments ever, zero collections, zero bankruptcies, multiple anchor cards, and a paid-off mortgage. The sole issue is 58% overall utilization driven by 3 near-maxed cards (AMEX 92%, Citi 93%, Cap One Biz 80%). Fix utilization and this becomes an A- profile.</div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">8</div>
+    Factor Breakdown
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">1. Credit Score</div>
+      <div class="factor-value">725 &mdash; Above 700 threshold</div>
+      <div class="factor-note">Held back almost entirely by utilization. With perfect payment history and 24-year age, score should reach 780+ once balances are resolved.</div>
+    </div>
+    <div class="grade-badge grade-b">B-</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">2. Utilization (Own Revolving)</div>
+      <div class="factor-value">58% &mdash; $39,088 used / $67,850 total revolving limits</div>
+      <div class="factor-note">Three cards near max: AMEX 92%, Citi 93%, Cap One Biz 80%. Four other cards at $0 balance.</div>
+    </div>
+    <div class="grade-badge grade-f">F</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">3. Late Payments</div>
+      <div class="factor-value">0 &mdash; Zero late payments across all accounts, ever</div>
+      <div class="factor-note">Perfect payment history on 14+ accounts spanning 24 years.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">4. Credit Age</div>
+      <div class="factor-value">11 yrs 4 mos average / oldest account 24 yrs</div>
+      <div class="factor-note">M&amp;T Bank LOC opened Mar 2002. Exceptionally deep credit history.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
+      <div class="factor-value">7 own cards &mdash; 2 anchor cards at $10K+ (Citi $17.5K, AMEX $15.7K)</div>
+      <div class="factor-note">Strong card profile. Also has Cap One Biz $8K, Lowes $6.6K, THD $5K, Comenity $2.5K, Cap One $2.5K.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">6. Inquiries</div>
+      <div class="factor-value">6 total &mdash; all auto-shopping related</div>
+      <div class="factor-note">Sep 2025 cluster (5 inquiries) counts as 1 for FICO scoring (auto shopping window). Plus 1 in Feb 2026. All 6 are disputable &mdash; no auto account was opened.</div>
+    </div>
+    <div class="grade-badge grade-c">C</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">7. Collections / Charge-offs</div>
+      <div class="factor-value">0 &mdash; Clean</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">8. Bankruptcies</div>
+      <div class="factor-value">None &mdash; No public records</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">&#128179;</div>
+    Per-Card Utilization (Own Revolving)
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Type</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Citi TY MC</td><td>Credit Card</td><td>$16,438</td><td>$17,550</td><td class="text-red">93%</td></tr>
+      <tr><td>AMEX</td><td>Credit Card</td><td>$14,583</td><td>$15,700</td><td class="text-red">92%</td></tr>
+      <tr><td>Capital One (Biz)</td><td>Business Card</td><td>$6,457</td><td>$8,000</td><td class="text-red">80%</td></tr>
+      <tr><td>Comenity/SmileGenFin</td><td>Charge Card</td><td>$1,610</td><td>$2,500</td><td class="text-amber">64%</td></tr>
+      <tr><td>Capital One</td><td>Credit Card</td><td>$0</td><td>$2,500</td><td class="text-green">0%</td></tr>
+      <tr><td>SYNCB/Lowes</td><td>Charge Card</td><td>$0</td><td>$6,600</td><td class="text-green">0%</td></tr>
+      <tr><td>THD/CBNA</td><td>Charge Card</td><td>$0</td><td>$5,000</td><td class="text-green">0%</td></tr>
+      <tr><td>M&amp;T Bank</td><td>Line of Credit</td><td>$0</td><td>$10,000</td><td class="text-green">0%</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top: 14px; padding: 12px 14px; background: #fef2f2; border-radius: 8px; font-size: 12px; color: #991b1b; border: 1px solid #fecaca;">
+    <strong>~$39K concentrated on 3 cards.</strong> The top 3 cards (Citi, AMEX, Cap One Biz) carry $37,478 combined. Four other cards and the LOC sit at $0. Paying down or consolidating ~$35K would drop total utilization from 58% to under 10%.
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #64748b;">i</div>
+    Noted Items (Not Graded)
+  </div>
+  <div class="noted-grid">
+    <div class="noted-item">
+      <div class="label">Authorized Users</div>
+      <div class="val">0 AU accounts</div>
+      <div class="detail">All cards are own accounts.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">DTI (Debt to Income)</div>
+      <div class="val">~$1,205/mo minimum</div>
+      <div class="detail">AMEX $520 + Citi $428 + Cap One Biz $193 + Comenity $64. Retired &mdash; income not reported.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (Last 6 Months)</div>
+      <div class="val">0 new accounts</div>
+      <div class="detail">No new accounts opened. Clean velocity.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Account Velocity (6-24 Months)</div>
+      <div class="val">0 accounts</div>
+      <div class="detail">Most recent open account: THD/CBNA (Jun 2023), which is outside the 24-month window.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Card Breakdown</div>
+      <div class="val">7 own + 1 LOC + 0 AU</div>
+      <div class="detail">Strong diversity: 2 major bank cards (Citi, AMEX), 1 biz card (Cap One), 3 store cards (Lowes, THD, Comenity), 1 personal card (Cap One $2.5K), 1 LOC (M&amp;T).</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">HELOC / LOC</div>
+      <div class="val">M&amp;T Bank $10K LOC</div>
+      <div class="detail">Joint, opened Mar 2002. $0 balance. Excluded from utilization grading if HELOC; included if standard LOC &mdash; either way, $0 balance so no impact.</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Mortgage History</div>
+      <div class="val">Paid off &mdash; $234,900</div>
+      <div class="detail">Guaranteed Rate originated Jun 2022, transferred to JPMCB Home, paid off Sep 2025. Demonstrates strong borrowing history and asset ownership.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eff6ff; color: #3b82f6;">&#9889;</div>
+    Next Steps
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 1 &mdash; Pay Down or Consolidate the Top 3 Cards (Critical)</div>
+    <div class="step-title">Reduce ~$37,478 across Citi, AMEX, and Cap One Biz</div>
+    <div class="step-detail">
+      <strong>Citi:</strong> $16,438 &rarr; under $1,755 (10% of $17,550)<br>
+      <strong>AMEX:</strong> $14,583 &rarr; under $1,570 (10% of $15,700)<br>
+      <strong>Cap One Biz:</strong> $6,457 &rarr; under $800 (10% of $8,000)<br><br>
+      Total paydown needed: ~$35K. If a lump-sum paydown isn't feasible, a personal loan to consolidate revolving debt would drop utilization immediately while converting the debt to an installment loan (which doesn't count toward revolving utilization). The CSM can discuss options.
+    </div>
+  </div>
+
+  <div class="solution-step priority-2">
+    <div class="step-label">Step 2 &mdash; Pay Down Comenity/SmileGenFin</div>
+    <div class="step-title">Reduce $1,610 to under $250</div>
+    <div class="step-detail">
+      At 64% usage on a $2,500 limit, this smaller card still contributes to the utilization problem. Target: under $250 (10%).
+    </div>
+  </div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 3 &mdash; Dispute All 6 Auto Inquiries</div>
+    <div class="step-title">All inquiries are auto-shopping with no account opened</div>
+    <div class="step-detail">
+      <strong>All disputable (no open accounts):</strong><br>
+      &bull; Transportation Alliance &mdash; Feb 13, 2026<br>
+      &bull; 700/Centennial Hyundai &mdash; Sep 23, 2025<br>
+      &bull; Hyundai Capital America &mdash; Sep 23, 2025 (x2)<br>
+      &bull; JPMCB Auto &mdash; Sep 20, 2025<br>
+      &bull; Transportation Alliance &mdash; Sep 8, 2025<br><br>
+      None of these resulted in an open account. All can be disputed. Removing them would drop inquiries from 6 to 0.
+    </div>
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">Other Useful Notes</div>
+    <div class="step-detail">
+      <strong>Consumer Statement on Sears:</strong> Closed Sears/CBNA card has a consumer statement noting &ldquo;delinquency due to extended unemployment.&rdquo; This is on a closed account with no balance and no reported lates &mdash; it has no scoring impact.<br><br>
+      <strong>Retired Status:</strong> Employer listed as &ldquo;Retired.&rdquo; Income verification will be needed for any personal loan or consolidation strategy. Retirement income, Social Security, pensions, or investment income all count.<br><br>
+      <strong>Card Profile Strength:</strong> With 2 anchor cards ($17.5K Citi + $15.7K AMEX), 7 total own cards, and 24 years of history, the card profile is already stacking-ready. Once utilization is resolved, no additional card building is needed.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f8fafc; color: #64748b;">&#128196;</div>
+    Full Account Inventory
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit</th><th>Payment</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <!-- Credit Cards -->
+      <tr class="category-header cat-cards"><td colspan="6">Credit Cards / Charge Cards</td></tr>
+      <tr><td>Citi TY MC/CBNA</td><td>Nov 2010</td><td class="text-red">$16,438</td><td>$17,550</td><td>$428/mo</td><td>Own</td></tr>
+      <tr><td>AMEX</td><td>Nov 2014</td><td class="text-red">$14,583</td><td>$15,700</td><td>$520/mo</td><td>Own</td></tr>
+      <tr><td>Capital One (Biz)</td><td>Jan 2015</td><td class="text-red">$6,457</td><td>$8,000</td><td>$193/mo</td><td>Own (Biz)</td></tr>
+      <tr><td>Comenity/SmileGenFin</td><td>Jul 2020</td><td class="text-amber">$1,610</td><td>$2,500</td><td>$64/mo</td><td>Own</td></tr>
+      <tr><td>SYNCB/Lowes</td><td>Jun 2017</td><td>$0</td><td>$6,600</td><td>$0</td><td>Own</td></tr>
+      <tr><td>THD/CBNA</td><td>Jun 2023</td><td>$0</td><td>$5,000</td><td>$0</td><td>Own</td></tr>
+      <tr><td>Capital One</td><td>Dec 2013</td><td>$0</td><td>$2,500</td><td>$0</td><td>Own</td></tr>
+
+      <!-- Line of Credit -->
+      <tr class="category-header cat-loc"><td colspan="6">Line of Credit</td></tr>
+      <tr><td>M&amp;T Bank</td><td>Mar 2002</td><td>$0</td><td>$10,000</td><td>$0</td><td>Joint</td></tr>
+
+      <!-- Closed Accounts -->
+      <tr class="category-header cat-closed"><td colspan="6">Closed Accounts</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>JPMCB Home (Mortgage)</td><td>Jun 2022</td><td>&mdash;</td><td>$234,900</td><td>&mdash;</td><td>Paid off</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Guaranteed Rate (Mortgage)</td><td>Jun 2022</td><td>&mdash;</td><td>$234,900</td><td>&mdash;</td><td>Transferred</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>CB/JaredCC (Charge)</td><td>Jul 2017</td><td>&mdash;</td><td>$10,500</td><td>&mdash;</td><td>Closed by grantor</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Capital One (Card)</td><td>Oct 2009</td><td>&mdash;</td><td>$3,500</td><td>&mdash;</td><td>Closed by grantor</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Sears/CBNA (Charge)</td><td>Sep 2003</td><td>&mdash;</td><td>$2,001</td><td>&mdash;</td><td>Closed (inactivity)</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;"><td>Comenity Bank/Avenue (Charge)</td><td>Dec 2013</td><td>&mdash;</td><td>$600</td><td>&mdash;</td><td>Closed by grantor</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="bottom-line grade-outlook-fix">
+  <strong>Must follow the game plan before proceeding.</strong> The F is solely from utilization &mdash; 3 near-maxed cards totaling ~$37K. Every other factor is A-level. Pay down or consolidate the revolving debt, dispute the 6 auto inquiries, and this transforms into an <strong>A- client</strong> with a projected 780+ score, 24 years of history, perfect payment record, and 2 anchor cards already in place.
+</div>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
+</div>
+
+<div class="footer">
+  <div class="logo">Huge Capital</div>
+  AI Credit Grading System &middot; 8-Factor Analysis
+</div>
+
+</body>
+</html>
