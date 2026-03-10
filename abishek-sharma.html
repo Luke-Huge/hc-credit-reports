@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Report Breakdown — Abishek Sharma</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: #a0aec0; margin-top: 2px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .header .meta span {
+    font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 14px; border-radius: 8px; color: #e2e8f0;
+  }
+  .header .meta span strong { color: #fff; }
+
+  .overall-grade {
+    text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
+    border: 2px solid #d97706; background: #fffbeb;
+  }
+  .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #d97706; line-height: 1; }
+  .overall-grade .verdict { font-weight: 700; font-size: 16px; color: #92400e; margin-top: 14px; margin-bottom: 10px; }
+  .overall-grade .meaning { font-size: 14px; color: #44403c; max-width: 640px; margin-left: auto; margin-right: auto; text-align: left; }
+  .overall-grade .meaning strong { color: #1a1a2e; }
+  .overall-grade .meaning ul { margin-top: 6px; margin-left: 18px; }
+  .overall-grade .meaning li { margin-bottom: 4px; }
+  .overall-grade .funding-range { margin-top: 14px; font-size: 13px; color: #92400e; font-weight: 700; }
+  .soft-f-banner {
+    background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 16px;
+    margin-bottom: 14px; font-size: 13px; color: #92400e; font-weight: 600; text-align: center;
+  }
+
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+  }
+  .section-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  }
+
+  .factor-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-info { flex: 1; }
+  .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
+  .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+  .grade-badge {
+    font-size: 15px; font-weight: 800; padding: 6px 16px; border-radius: 8px;
+    min-width: 40px; text-align: center; flex-shrink: 0; margin-left: 12px;
+  }
+  .grade-a { background: #dcfce7; color: #15803d; }
+  .grade-b { background: #d1fae5; color: #047857; }
+  .grade-c { background: #fef9c3; color: #a16207; }
+  .grade-d { background: #ffedd5; color: #c2410c; }
+  .grade-f { background: #fee2e2; color: #dc2626; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th {
+    text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e2e8f0;
+  }
+  table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: #f8fafc; }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 600; }
+  .text-amber { color: #d97706; font-weight: 600; }
+  .text-muted { color: #94a3b8; }
+
+  .noted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .noted-grid { grid-template-columns: 1fr; } }
+  .noted-item { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+  .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+  .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .noted-item.wide { grid-column: 1 / -1; }
+
+  .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
+  .solution-step.priority-1 { background: #fef2f2; border-color: #dc2626; }
+  .solution-step.priority-2 { background: #fffbeb; border-color: #d97706; }
+  .solution-step.priority-3 { background: #eff6ff; border-color: #3b82f6; }
+  .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .solution-step.priority-1 .step-label { color: #dc2626; }
+  .solution-step.priority-2 .step-label { color: #d97706; }
+  .solution-step.priority-3 .step-label { color: #3b82f6; }
+  .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  .bottom-line {
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
+  }
+  .bottom-line.grade-outlook-green { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .bottom-line.grade-outlook-amber { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+  .bottom-line.grade-outlook-red { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-auto td { background: #ecfdf5 !important; color: #065f46; border-left: 4px solid #10b981; }
+  .cat-personal td { background: #fdf4ff !important; color: #86198f; border-left: 4px solid #c026d3; }
+  .cat-student td { background: #fdf4ff !important; color: #86198f; border-left: 4px solid #c026d3; }
+  .cat-mortgage td { background: #fff7ed !important; color: #9a3412; border-left: 4px solid #f97316; }
+  .cat-other td { background: #f0f9ff !important; color: #075985; border-left: 4px solid #0ea5e9; }
+  .cat-closed td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
+
+  .inquiry-popup {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+  }
+  .inquiry-popup.active { display: flex; }
+  .inquiry-popup-content {
+    background: #fff; border-radius: 14px; padding: 24px; max-width: 700px; width: 90%;
+    max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .inquiry-popup-content h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #1a1a2e; }
+  .inquiry-summary { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .inquiry-summary .stat {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 120px; text-align: center;
+  }
+  .inquiry-summary .stat .num { font-size: 22px; font-weight: 800; }
+  .inquiry-summary .stat .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+  .close-btn {
+    float: right; background: #f1f5f9; border: none; border-radius: 8px; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; font-weight: 600; color: #64748b;
+  }
+  .close-btn:hover { background: #e2e8f0; }
+  .disputable { color: #16a34a; font-weight: 700; }
+  .not-disputable { color: #dc2626; font-weight: 700; }
+
+  .disclaimer {
+    margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; font-size: 11px; color: #64748b; line-height: 1.6;
+  }
+
+  .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- 1. HEADER -->
+<div class="header">
+  <h1>Credit Report Breakdown</h1>
+  <div class="subtitle">Huge Capital AI Credit Grading System</div>
+  <div class="meta">
+    <span><strong>Client:</strong> Abishek Sharma</span>
+    <span><strong>Source:</strong> Experian</span>
+    <span><strong>Score:</strong> 683</span>
+    <span><strong>Report:</strong> Mar 10, 2026</span>
+  </div>
+</div>
+
+<!-- 2. OVERALL GRADE -->
+<div class="soft-f-banner">&#9888; Soft F &mdash; Fixable without credit repair. Utilization over 100% on own revolving cards is the sole F trigger.</div>
+<div class="overall-grade">
+  <div class="label">Overall Grade</div>
+  <div class="grade">F</div>
+  <div class="verdict">Soft F &mdash; Revolving utilization at 114% is the sole F trigger. All other factors grade C or better.</div>
+  <div class="meaning">
+    <strong>Why:</strong> Own revolving card utilization is 114% ($33,005 on $29,000 in limits). Three cards are over 90% &mdash; two are over their limits. The 683 score is a D, dragged down by this utilization. Late payments from 2023 are old but still visible.
+    <br><br>
+    <strong>Path forward (recommended &mdash; be patient):</strong>
+    <ol style="margin-top: 6px; margin-left: 18px;">
+      <li>Apply for a personal loan to consolidate the $33K in revolving balances down to under 30% utilization.</li>
+      <li>Dispute the 6 disputable inquiries to drop from 9 to 3 (from D to B).</li>
+      <li>Once utilization drops below 30% and inquiries clear, score should climb to 720+ range, bringing overall grade to B or better.</li>
+    </ol>
+    <br>
+    <strong>Path forward (proceed now):</strong>
+    <ol style="margin-top: 6px; margin-left: 18px;">
+      <li>Not recommended. At 114% revolving utilization and a 683 score, approvals will be minimal and limits will be low. Fix utilization first.</li>
+    </ol>
+  </div>
+  <div class="funding-range">Estimated Funding Range: Not submittable (F grade)</div>
+</div>
+
+<!-- 3. FACTOR BREAKDOWN -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">8</div>
+    Factor Breakdown
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">1. Credit Score</div>
+      <div class="factor-value">683 FICO 8 (Experian)</div>
+      <div class="factor-note">680-699 = D range. Dragged down by high utilization and old late payments.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">2. Utilization (Own Revolving)</div>
+      <div class="factor-value">114% &mdash; $33,005 balance on $29,000 in limits</div>
+      <div class="factor-note">Excludes 2 AU cards (BofA $19K, Citi $24.5K). All 3 own cards are over 90%.</div>
+    </div>
+    <div class="grade-badge grade-f">F</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">3. Late Payments</div>
+      <div class="factor-value">2 late payments &mdash; Apr 2023 (30 days), May 2023 (60 days) on closed JPMCB card</div>
+      <div class="factor-note">~35 months old. Consumer statement disputes unauthorized use. Aging off naturally.</div>
+    </div>
+    <div class="grade-badge grade-c">C</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">4. Credit Age</div>
+      <div class="factor-value">7 years 2 months average &mdash; oldest account 19 years 10 months</div>
+      <div class="factor-note">Strong credit history depth.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">5. Credit Cards (Own)</div>
+      <div class="factor-value">3 own cards &mdash; JPMCB ($15,200), BofA ($8,000), Citi ($5,800)</div>
+      <div class="factor-note">3 cards with a $10K+ anchor. Meets the A threshold.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">6. Inquiries <span onclick="document.getElementById('inquiry-popup').classList.add('active')" style="font-size: 11px; font-weight: 600; color: #3b82f6; cursor: pointer; background: #eff6ff; padding: 2px 8px; border-radius: 5px; border: 1px solid #bfdbfe; margin-left: 8px; vertical-align: middle;">View Details</span></div>
+      <div class="factor-value">9 total on Experian &mdash; 6 disputable, 3 not disputable</div>
+      <div class="factor-note">8-10 = D range. After disputes, could drop to 3 (B grade).</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">7. Collections / Charge-offs</div>
+      <div class="factor-value">None</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">8. Bankruptcies</div>
+      <div class="factor-value">None</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+</div>
+
+<!-- INQUIRY POPUP -->
+<div class="inquiry-popup" id="inquiry-popup" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="inquiry-popup-content">
+    <button class="close-btn" onclick="document.getElementById('inquiry-popup').classList.remove('active')">Close</button>
+    <h3>Inquiry Detail &mdash; 30-Day Rule</h3>
+    <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">If an account was opened within 30 days of the inquiry date, the inquiry is tied to that account and is <strong>not disputable</strong>. If no account was opened within 30 days, the inquiry is <strong>disputable</strong>.</p>
+    <div class="inquiry-summary">
+      <div class="stat"><div class="num">9</div><div class="lbl">Total</div></div>
+      <div class="stat"><div class="num disputable">6</div><div class="lbl">Disputable</div></div>
+      <div class="stat"><div class="num not-disputable">3</div><div class="lbl">Not Disputable</div></div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Creditor</th><th>Date</th><th>Type</th><th>Account in 30 Days?</th><th>Disputable?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>JPMCB Card</td><td>Jan 27, 2026</td><td>Bank Credit Cards</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+        <tr>
+          <td>BK of Amer</td><td>Nov 14, 2025</td><td>Bank Credit Cards</td>
+          <td>BofA card opened Nov 25, 2025 (11 days)</td><td class="not-disputable">No</td>
+        </tr>
+        <tr>
+          <td>Citicards CBNA</td><td>Aug 4, 2025</td><td>Bank Credit Cards</td>
+          <td>Citi card opened Aug 4, 2025 (same day)</td><td class="not-disputable">No</td>
+        </tr>
+        <tr>
+          <td>M&amp;T Bank</td><td>Jun 26, 2025</td><td>All Banks</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+        <tr>
+          <td>JPMCB Card</td><td>Jun 20, 2025</td><td>Bank Credit Cards</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+        <tr>
+          <td>Stellantis Financial</td><td>Jan 22, 2025</td><td>Auto Financing</td>
+          <td>Stellantis lease opened Jan 29, 2025 (7 days)</td><td class="not-disputable">No</td>
+        </tr>
+        <tr>
+          <td>Valley National Bank</td><td>Jul 10, 2024</td><td>All Banks</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+        <tr>
+          <td>Ford Motor Credit</td><td>Jul 8, 2024</td><td>Auto Financing</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+        <tr>
+          <td>Santander Consumer USA</td><td>Jul 8, 2024</td><td>Finance Companies</td>
+          <td>No new account</td><td class="disputable">Yes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 4. PER-CARD UTILIZATION -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #fef9c3; color: #a16207;">%</div>
+    Per-Card Utilization (Own Revolving)
+  </div>
+  <table>
+    <thead>
+      <tr><th>Card</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JPMCB Card</td><td>$19,317</td><td>$15,200</td><td class="text-red">127%</td>
+      </tr>
+      <tr>
+        <td>Bank of America</td><td>$8,147</td><td>$8,000</td><td class="text-red">101%</td>
+      </tr>
+      <tr>
+        <td>Citicards CBNA</td><td>$5,541</td><td>$5,800</td><td class="text-red">95%</td>
+      </tr>
+      <tr style="font-weight: 700; border-top: 2px solid #e2e8f0;">
+        <td>Total Own Revolving</td><td>$33,005</td><td>$29,000</td><td class="text-red">114%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 5. NEXT STEPS -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #dcfce7; color: #16a34a;">&rarr;</div>
+    Next Steps
+  </div>
+
+  <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #dc2626; margin-bottom: 10px;">Mandatory Steps</div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 1</div>
+    <div class="step-title">Apply for a personal loan to consolidate revolving balances</div>
+    <div class="step-detail">All 3 own cards are over 90% &mdash; two are over their limits. A personal loan to pay down the $33K in revolving debt to under 30% utilization (~$8,700) is the single most impactful move. This alone could push the score into the 720+ range.</div>
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 2</div>
+    <div class="step-title">Dispute 6 disputable inquiries</div>
+    <div class="step-detail">JPMCB (Jan 2026), M&amp;T Bank (Jun 2025), JPMCB (Jun 2025), Valley National (Jul 2024), Ford Motor (Jul 2024), and Santander (Jul 2024) all have no matching accounts within 30 days. Removing these drops inquiry count from 9 to 3.</div>
+  </div>
+
+  <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #3b82f6; margin-top: 18px; margin-bottom: 10px;">Suggested Steps</div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 3</div>
+    <div class="step-title">Monitor late payment aging</div>
+    <div class="step-detail">The Apr/May 2023 late payments on the closed JPMCB card are ~35 months old and losing impact. They'll continue to age off. Consumer statement about unauthorized use is already on file.</div>
+  </div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 4</div>
+    <div class="step-title">Keep mortgage and auto loans current</div>
+    <div class="step-detail">Payment history on the FHA mortgage, Mercedes auto loan, and Stellantis lease is perfect. Continue making on-time payments to maintain this strength.</div>
+  </div>
+</div>
+
+<!-- 6. NOTED ITEMS -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #475569;">i</div>
+    Noted Items (Not Graded)
+  </div>
+  <div class="noted-grid">
+    <div class="noted-item">
+      <div class="label">AU Count</div>
+      <div class="val">2</div>
+      <div class="detail">BofA ($19K limit, 35% usage) and Citi ($24.5K limit, 0% usage). Excluded from utilization grading.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">5/24 Rule (Chase)</div>
+      <div class="val">2/5 cards + 2 loans</div>
+      <div class="detail">BofA (Nov 2025) and Citi (Aug 2025) = 2 personal cards in 24 months. Mercedes (Jul 2024) and Stellantis (Jan 2025) = 2 personal loans in 24 months.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">DTI (Debt to Income)</div>
+      <div class="val">~$9,971/mo</div>
+      <div class="detail">Mortgage $6,919 + Mercedes $1,539 + Stellantis $715 + JPMCB $495 + BofA $248 + Citi $55. Excludes AU card payments.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Per-Card Utilization</div>
+      <div class="val" style="font-size: 14px;">All 3 over 90%</div>
+      <div class="detail">JPMCB 127%, BofA 101%, Citi 95%. Every own card is maxed or over limit.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Card Breakdown</div>
+      <div class="val" style="font-size: 14px;">3 own + 2 AU</div>
+      <div class="detail">Open own: JPMCB (Jul 2012), BofA (Nov 2025), Citi (Aug 2025). AU: BofA, Citi. Multiple closed cards (Fourleaf $35K, Jovia $45K, Cap One $20K).</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">HELOC</div>
+      <div class="val">None</div>
+      <div class="detail">No HELOC on file.</div>
+    </div>
+  </div>
+  <!-- OTHER USEFUL NOTES -->
+  <div style="margin-top: 14px; padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; border-left: 4px solid #94a3b8;">
+    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 4px;">Other Useful Notes</div>
+    <div style="font-size: 13px; color: #4a5568; line-height: 1.5;">
+      <strong>Duplicate mortgage reporting:</strong> Loancare ($698,183) and Servbank ($699,001) both show the same FHA mortgage opened Nov 15, 2023 with original balance $738,908. This is the same loan transferred between servicers. Servbank/American Fina shows as closed/transferred.<br>
+      <strong>BSI Financial:</strong> Mortgage from Oct 2017 shows "Open" but balance is $0 and paid off 100%. Likely a reporting artifact &mdash; effectively closed.<br>
+      <strong>Closed card history:</strong> Previously held large-limit cards including Fourleaf FCU ($35K), Jovia Financial ($45K), Capital One ($20K), and WFBNA ($5K). All closed in good standing.<br>
+      <strong>Consumer statement:</strong> JPMCB closed card with late payments has a consumer statement: "MY CREDIT CARDS WERE USED BY AN UNAUTHORIZED SIGNER WITHOUT MY PERMISSION."
+    </div>
+  </div>
+</div>
+
+<!-- 7. ACCOUNT INVENTORY -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #e0e7ff; color: #4338ca;">&#9776;</div>
+    Full Account Inventory
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <!-- CREDIT CARDS -->
+      <tr class="category-header cat-cards"><td colspan="6">CREDIT CARDS (Own)</td></tr>
+      <tr>
+        <td>JPMCB Card</td><td>Jul 2012</td><td>$19,317</td><td>$15,200</td><td>$495</td><td class="text-red">127% util</td>
+      </tr>
+      <tr>
+        <td>Bank of America</td><td>Nov 2025</td><td>$8,147</td><td>$8,000</td><td>$248</td><td class="text-red">101% util</td>
+      </tr>
+      <tr>
+        <td>Citicards CBNA</td><td>Aug 2025</td><td>$5,541</td><td>$5,800</td><td>$55</td><td class="text-red">95% util</td>
+      </tr>
+      <tr class="category-header cat-cards"><td colspan="6">CREDIT CARDS (Authorized User)</td></tr>
+      <tr>
+        <td>Bank of America <span class="text-muted">(AU)</span></td><td>Apr 2024</td><td>$6,714</td><td>$19,000</td><td>$174</td><td class="text-amber">35% util</td>
+      </tr>
+      <tr>
+        <td>Citicards CBNA <span class="text-muted">(AU)</span></td><td>May 2006</td><td>$0</td><td>$24,500</td><td>$0</td><td class="text-green">0% util</td>
+      </tr>
+
+      <!-- MORTGAGE -->
+      <tr class="category-header cat-mortgage"><td colspan="6">MORTGAGE</td></tr>
+      <tr>
+        <td>Loancare (FHA)</td><td>Nov 2023</td><td>$698,183</td><td>$738,908</td><td>$6,919</td><td class="text-green">Current</td>
+      </tr>
+      <tr>
+        <td>Servbank (FHA)</td><td>Nov 2023</td><td>$699,001</td><td>$738,908</td><td>$6,919</td><td class="text-green">Current</td>
+      </tr>
+      <tr>
+        <td>BSI Financial <span class="text-muted">(paid off)</span></td><td>Oct 2017</td><td>$0</td><td>$424,000</td><td>$0</td><td class="text-green">Paid Off</td>
+      </tr>
+
+      <!-- AUTO -->
+      <tr class="category-header cat-auto"><td colspan="6">AUTO LOANS / LEASES</td></tr>
+      <tr>
+        <td>Mercedes Benz Financial</td><td>Jul 2024</td><td>$66,257</td><td>$83,477</td><td>$1,539</td><td class="text-green">Current</td>
+      </tr>
+      <tr>
+        <td>Stellantis Financial (Lease)</td><td>Jan 2025</td><td>$19,331</td><td>$27,923</td><td>$715</td><td class="text-green">Current</td>
+      </tr>
+
+      <!-- CLOSED -->
+      <tr class="category-header cat-closed"><td colspan="6">CLOSED ACCOUNTS</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>JPMCB Card</td><td>Aug 2021</td><td>&mdash;</td><td>$3,000</td><td>&mdash;</td><td>Closed &bull; 2 lates</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Peoples Alliance FCU (Lease)</td><td>Aug 2022</td><td>&mdash;</td><td>$45,773</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Capital One <span class="text-muted">(AU)</span></td><td>Jan 2024</td><td>&mdash;</td><td>$10,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Servbank/American Fina (FHA)</td><td>Nov 2023</td><td>&mdash;</td><td>$738,908</td><td>&mdash;</td><td>Transferred</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Capital One</td><td>Feb 2021</td><td>&mdash;</td><td>$20,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>BMW Financial Services (Lease)</td><td>Sep 2020</td><td>&mdash;</td><td>$36,734</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Cal Automotive (Lease)</td><td>Aug 2020</td><td>&mdash;</td><td>$9,976</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Mercedes Benz Financial (Lease)</td><td>Sep 2017</td><td>&mdash;</td><td>$24,143</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Lendkey/Dept of Int FC (Education)</td><td>Aug 2016</td><td>&mdash;</td><td>$10,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Lendkey/Dept of Int FC (Education)</td><td>Sep 2018</td><td>&mdash;</td><td>$5,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>WFBNA Card (Charge Card)</td><td>Mar 2019</td><td>&mdash;</td><td>$5,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Fourleaf FCU</td><td>Sep 2018</td><td>&mdash;</td><td>$35,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Jovia Financial FCU</td><td>Oct 2018</td><td>&mdash;</td><td>$45,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Syncb/Banarepdc</td><td>Jan 2015</td><td>&mdash;</td><td>$1,024</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>US Dept of Ed/Glelsi (Education)</td><td>Jan 2010</td><td>&mdash;</td><td>$4,688</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>US Dept of Ed/Glelsi (Education)</td><td>Sep 2008</td><td>&mdash;</td><td>$14,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Amex/CBNA</td><td>Jul 2008</td><td>&mdash;</td><td>$900</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Central Loan Admin (Mortgage)</td><td>Oct 2017</td><td>&mdash;</td><td>$280,000</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Pennymac Loan Services (Mortgage)</td><td>Jan 2017</td><td>&mdash;</td><td>$364,500</td><td>&mdash;</td><td>Closed</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 8. BOTTOM LINE -->
+<div class="bottom-line grade-outlook-amber">
+  <strong>Bottom Line:</strong> Abishek has a strong credit foundation &mdash; 7+ years of credit age, clean collections/bankruptcy record, 3 own cards with a $15K anchor, and a history of large-limit cards. The problem is singular: all 3 own cards are maxed out, pushing utilization to 114% and dragging the score to 683. A personal loan to consolidate the $33K in revolving balances is the fix. Combined with disputing 6 inquiries, the projected post-cleanup grade is <strong>B to A-</strong> with an estimated score of <strong>720-740+</strong>.
+</div>
+
+<!-- 9. DISCLAIMER -->
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
+</div>
+
+<div class="footer">
+  <div class="logo">HUGE CAPITAL</div>
+  Powered by Huge Capital AI Credit Grading System
+</div>
+
+</body>
+</html>
