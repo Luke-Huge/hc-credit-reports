@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Credit Cards — Huge Capital</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f7f8fb;
+    color: #3b4252;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-header {
+    background: #011040;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .page-header h1 {
+    font-family: 'DM Serif Display', serif;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .form-card {
+    background: #fff;
+    max-width: 720px;
+    width: 100%;
+    margin: 32px auto;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    padding: 48px;
+  }
+  @media (max-width: 768px) { .form-card { padding: 32px 24px; margin: 16px; } }
+  @media (max-width: 480px) { .form-card { padding: 24px 16px; } }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #0884ed;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 24px;
+  }
+
+  /* — Views — */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* — Search — */
+  .bank-search {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border: 1.5px solid #dfe3ea;
+    border-radius: 10px;
+    background: #fafbfc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 12px center no-repeat;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: #0d1117;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+  }
+  .bank-search:focus {
+    outline: none;
+    border-color: #0884ed;
+    box-shadow: 0 0 0 3px rgba(8,132,237,0.12);
+    background-color: #fff;
+  }
+  .bank-search::placeholder { color: #9ca3af; }
+
+  /* — Bank Grid — */
+  .bank-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 600px) { .bank-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .bank-chip {
+    padding: 12px 8px;
+    border: 1.5px solid #dfe3ea;
+    border-radius: 10px;
+    background: #fafbfc;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b4252;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .bank-chip:hover { border-color: #0884ed; color: #0884ed; background: #f0f7ff; }
+  .bank-chip.has-selections {
+    background: #eef6ff;
+    border-color: #0884ed;
+    color: #0884ed;
+  }
+  .bank-chip.search-dim { opacity: 0.35; order: 99; }
+  .bank-chip .chip-badge {
+    display: none;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background: #0884ed;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    line-height: 20px;
+    text-align: center;
+  }
+  .bank-chip.has-selections .chip-badge { display: block; }
+
+  .bank-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: -0.5px;
+  }
+
+  /* — Card Pick View — */
+  .card-pick-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card-pick-back {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+  }
+  .card-pick-back:hover { background: #f0f0f3; color: #0d1117; }
+  .card-pick-bank-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #0d1117;
+  }
+  .card-pick-hint {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 16px;
+  }
+
+  .card-list { list-style: none; margin-bottom: 24px; }
+  .card-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 15px;
+    color: #3b4252;
+    border: 1.5px solid transparent;
+    margin-bottom: 6px;
+    user-select: none;
+  }
+  .card-item:hover { background: #f0f7ff; }
+  .card-item.checked {
+    background: #eef6ff;
+    border-color: #c5ddf8;
+  }
+  .card-item .card-check {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #dfe3ea;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: transparent;
+  }
+  .card-item.checked .card-check {
+    background: #0884ed;
+    border-color: #0884ed;
+    color: #fff;
+  }
+  .card-item .card-name { flex: 1; font-weight: 500; }
+
+  /* — Buttons — */
+  .btn-primary {
+    width: 100%;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 50px;
+    background: #0884ed;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .btn-primary:hover {
+    background: #0672d0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(8,132,237,0.3);
+  }
+  .btn-primary.disabled {
+    background: #c0cfe0;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* — Selection summary chips — */
+  .selection-summary {
+    display: none;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: #f0f7ff;
+    border: 1.5px solid #c5ddf8;
+    border-radius: 12px;
+  }
+  .selection-summary.visible { display: block; }
+  .selection-summary-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0884ed;
+    margin-bottom: 10px;
+  }
+  .selection-summary-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sel-chip {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 8px 5px 10px;
+    background: #fff;
+    border: 1px solid #c5ddf8;
+    border-radius: 20px;
+    color: #0d1117;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sel-chip-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    line-height: 1;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .sel-chip-x:hover {
+    background: #fef2f2;
+    color: #e74c3c;
+  }
+
+  /* — Other toggle — */
+  .other-toggle {
+    padding: 12px 16px;
+    border: 1.5px dashed #dfe3ea;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    margin-bottom: 12px;
+    user-select: none;
+  }
+  .other-toggle:hover { border-color: #0884ed; color: #0884ed; background: #f0f7ff; }
+  .other-toggle.open { border-style: solid; border-color: #0884ed; color: #0884ed; background: #eef6ff; }
+  .other-toggle-icon {
+    display: inline-block;
+    transition: transform 0.2s;
+    font-weight: 700;
+  }
+  .other-toggle.open .other-toggle-icon { transform: rotate(45deg); }
+
+  /* — Other section — */
+  .other-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .other-text-input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1.5px solid #dfe3ea;
+    border-radius: 10px;
+    background: #fafbfc;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    color: #0d1117;
+    transition: all 0.2s;
+  }
+  .other-text-input:focus {
+    outline: none;
+    border-color: #0884ed;
+    box-shadow: 0 0 0 3px rgba(8,132,237,0.12);
+    background: #fff;
+  }
+  .other-text-input::placeholder { color: #9ca3af; }
+  .sc-remove {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .sc-remove:hover { color: #e74c3c; background: #fef2f2; }
+
+  .add-other-btn {
+    background: none;
+    border: 1.5px dashed #dfe3ea;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0884ed;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .add-other-btn:hover { border-color: #0884ed; background: #eef6ff; }
+  .add-other-btn.disabled {
+    color: #c0c7d1;
+    border-color: #e8eaee;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* — Divider — */
+  .details-divider {
+    display: none;
+    border: none;
+    border-top: 2px solid #e2e8f0;
+    margin: 28px 0 24px;
+  }
+  .details-divider.visible { display: block; }
+
+  /* — Details section — */
+  .details-section {
+    display: none;
+  }
+  .details-section.visible { display: block; animation: fadeIn 0.2s ease; }
+
+  .phase2-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+  }
+  .phase2-progress-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b4252;
+  }
+  .phase2-progress-text span { color: #0884ed; }
+  .phase2-progress-bar {
+    width: 120px;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .phase2-progress-fill {
+    height: 100%;
+    background: #0884ed;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .detail-card {
+    background: #f9fafb;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .detail-card.complete {
+    border-color: #86d4a0;
+    background: #f6fef8;
+  }
+  .detail-card.has-error {
+    border-color: #e74c3c;
+  }
+  .detail-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .detail-card-info { flex: 1; }
+  .detail-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0d1117;
+    margin-bottom: 4px;
+  }
+  .detail-card-bank {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .detail-fields {
+    display: flex;
+    gap: 12px;
+  }
+  @media (max-width: 480px) { .detail-fields { flex-direction: column; } }
+  .detail-field { flex: 1; }
+  .detail-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #6b7280;
+    margin-bottom: 6px;
+  }
+  .detail-field input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #dfe3ea;
+    border-radius: 10px;
+    background: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    color: #0d1117;
+    transition: all 0.2s;
+  }
+  .detail-field input:focus {
+    outline: none;
+    border-color: #0884ed;
+    box-shadow: 0 0 0 3px rgba(8,132,237,0.12);
+  }
+  .detail-field input::placeholder { color: #b0b8c4; }
+  .detail-field input.input-error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231,76,60,0.1);
+  }
+  .field-error-msg {
+    font-size: 11px;
+    color: #e74c3c;
+    margin-top: 4px;
+    display: none;
+  }
+  .field-error-msg.visible { display: block; }
+
+  .form-error-block {
+    display: none;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .form-error-block.visible { display: block; }
+
+  .page-footer {
+    background: #011040;
+    width: 100%;
+    padding: 16px 0;
+    text-align: center;
+    margin-top: auto;
+  }
+  .page-footer p { color: rgba(255,255,255,0.4); font-size: 12px; }
+
+  /* — Mobile enhancements — */
+  @media (max-width: 480px) {
+    .card-item {
+      padding: 15px 14px;
+      font-size: 14px;
+      min-height: 48px;
+    }
+    .bank-chip {
+      padding: 14px 6px;
+      font-size: 11px;
+      min-height: 80px;
+    }
+    .detail-card {
+      padding: 14px;
+    }
+    .detail-card-name {
+      font-size: 13px;
+      word-break: break-word;
+    }
+    .phase2-progress {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .phase2-progress-bar { width: 100%; }
+    .sel-chip { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Huge Capital — Business Credit Application</h1>
+</div>
+
+<div class="form-card">
+
+  <!-- ===== Main View: Select + Details ===== -->
+  <div class="view active" id="viewBankList">
+    <div class="section-label">Your Business Credit Cards</div>
+    <p class="section-subtitle">Select each bank where you hold a business credit card, then enter the limit and balance for each.</p>
+
+    <input class="bank-search" type="text" id="bankSearch" placeholder="Search for a bank..." oninput="filterBanks()">
+
+    <div class="section-label">Major Banks</div>
+    <div class="bank-grid" id="majorBanks"></div>
+
+    <div class="section-label">Other Banks &amp; Issuers</div>
+    <div class="bank-grid" id="otherBanks"></div>
+
+    <div class="other-toggle" id="otherToggle" onclick="toggleOtherSection()">
+      <span class="other-toggle-icon" id="otherToggleIcon">+</span> I have a card not listed above
+    </div>
+    <div id="otherSection" style="display:none;">
+      <div class="section-label">Card Not Listed?</div>
+      <div id="otherEntries">
+        <div class="other-input-row">
+          <input class="other-text-input" type="text" placeholder="Type card name..." oninput="onOtherInput()">
+          <button class="sc-remove" onclick="removeOtherEntry(this)" title="Remove">&times;</button>
+        </div>
+      </div>
+      <button class="add-other-btn disabled" id="addOtherBtn" onclick="addOtherEntry()">+ Add Another Card</button>
+    </div>
+
+    <div class="selection-summary" id="selectionSummary">
+      <div class="selection-summary-title">Selected Cards</div>
+      <div class="selection-summary-list" id="selectionSummaryList"></div>
+    </div>
+
+    <!-- Details appear inline below -->
+    <hr class="details-divider" id="detailsDivider">
+
+    <div class="details-section" id="detailsSection">
+      <div class="section-label">Credit Limits &amp; Balances</div>
+      <p class="section-subtitle">Enter the current credit limit and balance for each card.</p>
+
+      <div class="phase2-progress">
+        <span class="phase2-progress-text"><span id="filledCount">0</span> of <span id="totalCount">0</span> cards completed</span>
+        <div class="phase2-progress-bar"><div class="phase2-progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+
+      <div id="detailCards"></div>
+
+      <div class="form-error-block" id="formError">Please enter a credit limit and balance for every card.</div>
+
+      <button class="btn-primary" id="submitBtn" onclick="handleSubmit()">Continue to Next Step &rarr;</button>
+    </div>
+  </div>
+
+  <!-- View: Card Pick (single bank) -->
+  <div class="view" id="viewCardPick">
+    <div class="card-pick-header">
+      <button class="card-pick-back" onclick="backToBankList()">&larr; Back</button>
+      <span class="card-pick-bank-name" id="pickBankName"></span>
+    </div>
+    <p class="card-pick-hint">Tap any card you currently have with this bank.</p>
+    <ul class="card-list" id="cardList"></ul>
+    <button class="btn-primary" onclick="backToBankList()">Done &mdash; Back to Banks</button>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>&copy; 2026 Huge Capital Funding. All rights reserved.</p>
+</div>
+
+<script>
+var CARD_MATRIX = {
+  "Chase":["Ink Business Preferred Credit Card","Ink Business Unlimited Credit Card","Ink Business Cash Credit Card","Ink Business Premier Credit Card","Sapphire Reserve for Business Credit Card","United Business Card","United Club Business Card","Southwest Rapid Rewards Performance Business Credit Card","Southwest Rapid Rewards Premier Business Credit Card","IHG One Rewards Premier Business Credit Card","World of Hyatt Business Credit Card"],
+  "American Express":["Business Platinum Card","Business Gold Card","Blue Business Cash Card","Blue Business Plus Credit Card","Business Green Rewards Card","Plum Card","Delta SkyMiles Reserve Business Card","Delta SkyMiles Platinum Business Card","Delta SkyMiles Gold Business Card","Marriott Bonvoy Business Card","Hilton Honors Business Card","Amazon Business Prime Card","Amazon Business Card"],
+  "Bank of America":["Business Advantage Unlimited Cash Rewards","Business Advantage Customized Cash Rewards","Business Advantage Travel Rewards","Platinum Plus Mastercard"],
+  "Wells Fargo":["Signify Business Cash Credit Card"],
+  "US Bank":["Triple Cash Rewards Visa Business Card","Business Altitude Power Visa Signature Card","Business Altitude Connect Visa Signature Card","Business Leverage Visa Signature Card","Business Shield Visa Card"],
+  "Capital One":["Spark Cash Plus","Spark Cash Select","Spark Miles","Spark Miles Select","Spark Classic","Venture X Business"],
+  "Citi":["CitiBusiness AAdvantage Platinum Select Mastercard","Costco Anywhere Visa Business Card"],
+  "PNC":["Cash Rewards Visa Signature Business Credit Card","Visa Business Credit Card","Points Visa Business Credit Card","Travel Rewards Visa Business Credit Card","BusinessOptions Visa Signature Credit Card"],
+  "Truist":["Business Cash Rewards Credit Card","Business Premium Credit Card","Business Travel Rewards Credit Card","Business Credit Card"],
+  "Citizens":["Business Platinum Credit Card","Business Cash Back Plus Credit Card"],
+  "TD Bank":["Business Solutions Credit Card","Business Solutions Premium Credit Card"],
+  "BMO":["Business Platinum Credit Card","Business Platinum Rewards Credit Card","Business Cash Back Credit Card"],
+  "Barclays":["Barclays Business Credit Card","AAdvantage Aviator Business Mastercard","Wyndham Rewards Earner Business Card","JetBlue Business Card"],
+  "Fifth Third":["Fifth Third Business Credit Card","Fifth Third Business Cash Back Credit Card"],
+  "First Citizens":["First Citizens Business Real Rewards Card","First Citizens Business Platinum Credit Card"],
+  "KeyBank":["KeyBank Business Rewards Credit Card","KeyBank Business Cash Back Credit Card"],
+  "Brex":["Brex Corporate Credit Card"],
+  "Ramp":["Ramp Corporate Card"],
+  "BILL (Divvy)":["BILL Divvy Corporate Card"],
+  "Huntington Bank":["Huntington Business Rewards Credit Card","Huntington Business Credit Card","Huntington Voice Business Credit Card"],
+  "Regions Bank":["Regions Visa Business Credit Card","Regions Visa Business Rewards Credit Card","Regions Business Prestige Visa Credit Card"],
+  "M&T Bank":["M&T Business Rewards Credit Card","M&T Business Credit Card"],
+  "Goldman Sachs (Marcus)":["Marcus Business Mastercard"],
+  "Capital on Tap":["Capital on Tap Business Credit Card"],
+  "Navy Federal Credit Union":["Navy Federal Business Visa Credit Card","Navy Federal Business Real Rewards Card"],
+  "Synchrony":["Sam's Club Business Mastercard","Amazon Business Store Card","PayPal Business Cashback Mastercard"]
+};
+
+// Alphabetize cards within each bank
+Object.keys(CARD_MATRIX).forEach(function(bank) {
+  CARD_MATRIX[bank].sort();
+});
+
+var MAJOR_BANKS = ["Chase","American Express","Bank of America","Wells Fargo","US Bank","Capital One"];
+var selections = {};
+
+var BANK_COLORS = {
+  "Chase":"#0a5ca8","American Express":"#006fcf","Bank of America":"#c41230","Wells Fargo":"#cd1409",
+  "US Bank":"#d71e28","Capital One":"#d03027","Citi":"#003b70","PNC":"#f58025",
+  "Truist":"#8b2f89","Citizens":"#007a33","TD Bank":"#2e8b00","BMO":"#0075be",
+  "Barclays":"#00aeef","Fifth Third":"#004c97","First Citizens":"#1a3c6e","KeyBank":"#e41937",
+  "Brex":"#0a0a0a","Ramp":"#f2c744","BILL (Divvy)":"#00c4b3","Huntington Bank":"#00693c",
+  "Regions Bank":"#007a3e","M&T Bank":"#6d2077","Goldman Sachs (Marcus)":"#7399c6",
+  "Capital on Tap":"#1a1a2e","Navy Federal Credit Union":"#003b6f","Synchrony":"#00587c"
+};
+
+function bankInitials(name) {
+  var map = {'BILL (Divvy)':'BD','Goldman Sachs (Marcus)':'GS','Capital on Tap':'CT','Navy Federal Credit Union':'NF','M&T Bank':'MT'};
+  if (map[name]) return map[name];
+  var words = name.replace(/[()]/g,'').split(/\s+/);
+  return words.length === 1 ? words[0].substring(0,2).toUpperCase() : (words[0][0] + words[1][0]).toUpperCase();
+}
+
+// ——— Init ———
+function init() {
+  var majorGrid = document.getElementById('majorBanks');
+  var otherGrid = document.getElementById('otherBanks');
+  var others = Object.keys(CARD_MATRIX).filter(function(b){ return MAJOR_BANKS.indexOf(b) === -1; }).sort();
+  MAJOR_BANKS.forEach(function(bank){ majorGrid.appendChild(createBankChip(bank)); });
+  others.forEach(function(bank){ otherGrid.appendChild(createBankChip(bank)); });
+}
+
+function createBankChip(bank) {
+  var div = document.createElement('div');
+  div.className = 'bank-chip';
+  div.dataset.bank = bank;
+  var color = BANK_COLORS[bank] || '#6b7280';
+  var tc = bank === 'Ramp' ? '#0a0a0a' : '#fff';
+  div.innerHTML =
+    '<div class="bank-icon" style="background:' + color + ';color:' + tc + '">' + bankInitials(bank) + '</div>' +
+    '<span>' + bank + '</span>' +
+    '<span class="chip-badge">0</span>';
+  div.onclick = function(){ openBank(bank); };
+  return div;
+}
+
+// ——— Views ———
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+// ——— Search ———
+function filterBanks() {
+  var q = document.getElementById('bankSearch').value.trim().toLowerCase();
+  document.querySelectorAll('.bank-chip').forEach(function(chip) {
+    chip.classList.toggle('search-dim', q && chip.dataset.bank.toLowerCase().indexOf(q) === -1);
+  });
+}
+
+// ——— Open Bank ———
+function openBank(bank) {
+  if (!selections[bank]) selections[bank] = new Set();
+  document.getElementById('pickBankName').textContent = bank;
+  var list = document.getElementById('cardList');
+  list.innerHTML = '';
+
+  CARD_MATRIX[bank].forEach(function(card) {
+    var li = document.createElement('li');
+    li.className = 'card-item' + (selections[bank].has(card) ? ' checked' : '');
+    li.innerHTML = '<div class="card-check">&#10003;</div><span class="card-name">' + card + '</span>';
+    li.onclick = function() {
+      if (selections[bank].has(card)) { selections[bank].delete(card); li.classList.remove('checked'); }
+      else { selections[bank].add(card); li.classList.add('checked'); }
+    };
+    list.appendChild(li);
+  });
+
+  showView('viewCardPick');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ——— Back to Bank List ———
+function backToBankList() {
+  Object.keys(selections).forEach(updateChipBadge);
+  refreshSummary();
+  rebuildDetailCards();
+  showView('viewBankList');
+  document.getElementById('bankSearch').value = '';
+  filterBanks();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateChipBadge(bank) {
+  var chip = document.querySelector('.bank-chip[data-bank="' + bank + '"]');
+  if (!chip) return;
+  var count = selections[bank] ? selections[bank].size : 0;
+  chip.querySelector('.chip-badge').textContent = count;
+  chip.classList.toggle('has-selections', count > 0);
+}
+
+// ——— Summary ———
+function refreshSummary() {
+  var summaryEl = document.getElementById('selectionSummary');
+  var listEl = document.getElementById('selectionSummaryList');
+  listEl.innerHTML = '';
+  var total = 0;
+
+  Object.keys(selections).forEach(function(bank) {
+    selections[bank].forEach(function(card) {
+      total++;
+      var chip = document.createElement('span');
+      chip.className = 'sel-chip';
+      chip.innerHTML = card + '<button class="sel-chip-x" title="Remove">&times;</button>';
+      chip.querySelector('.sel-chip-x').onclick = function(e) {
+        e.stopPropagation();
+        selections[bank].delete(card);
+        if (selections[bank].size === 0) delete selections[bank];
+        updateChipBadge(bank);
+        refreshSummary();
+        rebuildDetailCards();
+      };
+      listEl.appendChild(chip);
+    });
+  });
+
+  document.querySelectorAll('#otherEntries .other-input-row input').forEach(function(inp) {
+    if (inp.value.trim()) {
+      total++;
+      var chip = document.createElement('span');
+      chip.className = 'sel-chip';
+      var inputRef = inp;
+      chip.innerHTML = inp.value.trim() + '<button class="sel-chip-x" title="Remove">&times;</button>';
+      chip.querySelector('.sel-chip-x').onclick = function(e) {
+        e.stopPropagation();
+        inputRef.value = '';
+        checkOtherBtn();
+        refreshSummary();
+        rebuildDetailCards();
+      };
+      listEl.appendChild(chip);
+    }
+  });
+
+  summaryEl.classList.toggle('visible', total > 0);
+}
+
+// ——— Detail Cards (inline) ———
+function rebuildDetailCards() {
+  var container = document.getElementById('detailCards');
+  var divider = document.getElementById('detailsDivider');
+  var section = document.getElementById('detailsSection');
+
+  // Save current values before rebuilding
+  var savedValues = {};
+  container.querySelectorAll('.detail-card').forEach(function(el) {
+    var key = el.dataset.bank + '|||' + el.dataset.card;
+    var inputs = el.querySelectorAll('.detail-fields input');
+    savedValues[key] = { limit: inputs[0].value, balance: inputs[1].value };
+  });
+
+  container.innerHTML = '';
+
+  // Add cards from bank selections
+  Object.keys(selections).forEach(function(bank) {
+    selections[bank].forEach(function(card) {
+      container.appendChild(createDetailCard(bank, card, savedValues));
+    });
+  });
+
+  // Add "Other" entries
+  document.querySelectorAll('#otherEntries .other-input-row input').forEach(function(inp) {
+    if (inp.value.trim()) {
+      container.appendChild(createDetailCard('Other', inp.value.trim(), savedValues));
+    }
+  });
+
+  var hasCards = container.querySelectorAll('.detail-card').length > 0;
+  divider.classList.toggle('visible', hasCards);
+  section.classList.toggle('visible', hasCards);
+
+  if (hasCards) {
+    document.getElementById('formError').classList.remove('visible');
+    updateProgress();
+  }
+}
+
+function createDetailCard(bank, card, savedValues) {
+  var key = bank + '|||' + card;
+  var saved = (savedValues && savedValues[key]) || { limit: '', balance: '' };
+  var div = document.createElement('div');
+  div.className = 'detail-card';
+  div.dataset.bank = bank;
+  div.dataset.card = card;
+  div.innerHTML =
+    '<div class="detail-card-header">' +
+      '<div class="detail-card-info">' +
+        '<div class="detail-card-name">' + card + '</div>' +
+        '<div class="detail-card-bank">' + bank + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="detail-fields">' +
+      '<div class="detail-field">' +
+        '<label>Credit Limit *</label>' +
+        '<input type="text" placeholder="$0" value="' + saved.limit + '" onfocus="this.select()" oninput="formatCurrency(this); clearFieldError(this); updateProgress()">' +
+        '<div class="field-error-msg">Required</div>' +
+      '</div>' +
+      '<div class="detail-field">' +
+        '<label>Balance *</label>' +
+        '<input type="text" placeholder="$0" value="' + saved.balance + '" onfocus="this.select()" oninput="formatCurrency(this); clearFieldError(this); updateProgress()">' +
+        '<div class="field-error-msg">Required</div>' +
+      '</div>' +
+    '</div>';
+  return div;
+}
+
+function updateProgress() {
+  var cards = document.querySelectorAll('#detailCards .detail-card');
+  var total = cards.length;
+  var filled = 0;
+  cards.forEach(function(c) {
+    var inputs = c.querySelectorAll('.detail-fields input');
+    var ok = inputs[0].value.replace(/[^\d]/g,'').length > 0 && inputs[1].value.replace(/[^\d]/g,'').length > 0;
+    c.classList.toggle('complete', ok);
+    if (ok) filled++;
+  });
+  document.getElementById('filledCount').textContent = filled;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('progressFill').style.width = (total > 0 ? Math.round((filled/total)*100) : 0) + '%';
+}
+
+function clearFieldError(input) {
+  input.classList.remove('input-error');
+  input.parentElement.querySelector('.field-error-msg').classList.remove('visible');
+  document.getElementById('formError').classList.remove('visible');
+}
+
+// ——— Other entries ———
+function onOtherInput() { checkOtherBtn(); refreshSummary(); rebuildDetailCards(); }
+
+function checkOtherBtn() {
+  var rows = document.querySelectorAll('#otherEntries .other-input-row');
+  var last = rows[rows.length - 1];
+  document.getElementById('addOtherBtn').classList.toggle('disabled', !last.querySelector('input').value.trim());
+}
+
+function addOtherEntry() {
+  var rows = document.querySelectorAll('#otherEntries .other-input-row');
+  if (!rows[rows.length - 1].querySelector('input').value.trim()) return;
+  var container = document.getElementById('otherEntries');
+  var row = document.createElement('div');
+  row.className = 'other-input-row';
+  row.innerHTML =
+    '<input class="other-text-input" type="text" placeholder="Type card name..." oninput="onOtherInput()">' +
+    '<button class="sc-remove" onclick="removeOtherEntry(this)" title="Remove">&times;</button>';
+  container.appendChild(row);
+  document.getElementById('addOtherBtn').classList.add('disabled');
+  row.querySelector('input').focus();
+}
+
+function removeOtherEntry(btn) {
+  var container = document.getElementById('otherEntries');
+  var rows = container.querySelectorAll('.other-input-row');
+  if (rows.length > 1) {
+    btn.closest('.other-input-row').remove();
+  } else {
+    btn.closest('.other-input-row').querySelector('input').value = '';
+  }
+  checkOtherBtn(); refreshSummary(); rebuildDetailCards();
+}
+
+// ——— Other section toggle ———
+function toggleOtherSection() {
+  var section = document.getElementById('otherSection');
+  var toggle = document.getElementById('otherToggle');
+  var isOpen = section.style.display !== 'none';
+  section.style.display = isOpen ? 'none' : 'block';
+  toggle.classList.toggle('open', !isOpen);
+}
+
+// ——— Currency ———
+function formatCurrency(input) {
+  var raw = input.value.replace(/[^\d]/g, '');
+  if (!raw) { input.value = ''; return; }
+  input.value = '$' + parseInt(raw, 10).toLocaleString('en-US');
+}
+
+// ——— Submit ———
+function handleSubmit() {
+  var cards = document.querySelectorAll('#detailCards .detail-card');
+  if (cards.length === 0) return;
+  var hasError = false;
+
+  cards.forEach(function(card) {
+    var inputs = card.querySelectorAll('.detail-fields input');
+    var errors = card.querySelectorAll('.field-error-msg');
+    var cardErr = false;
+    [0,1].forEach(function(i) {
+      if (!inputs[i].value.replace(/[^\d]/g,'')) {
+        inputs[i].classList.add('input-error');
+        errors[i].classList.add('visible');
+        hasError = true; cardErr = true;
+      } else {
+        inputs[i].classList.remove('input-error');
+        errors[i].classList.remove('visible');
+      }
+    });
+    card.classList.toggle('has-error', cardErr);
+  });
+
+  if (hasError) {
+    document.getElementById('formError').classList.add('visible');
+    var first = document.querySelector('.input-error');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  document.getElementById('formError').classList.remove('visible');
+
+  var data = { cards: [] };
+  cards.forEach(function(el) {
+    var inputs = el.querySelectorAll('.detail-fields input');
+    data.cards.push({
+      bank: el.dataset.bank,
+      card: el.dataset.card,
+      creditLimit: inputs[0].value,
+      balance: inputs[1].value
+    });
+  });
+
+  console.log('Form data:', JSON.stringify(data, null, 2));
+  alert('Data captured! Check console.\n\nTotal cards: ' + data.cards.length);
+}
+
+// ——— Enter key submits ———
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    var detailsVisible = document.getElementById('detailsSection').classList.contains('visible');
+    var inDetailInput = e.target.closest && e.target.closest('.detail-field');
+    if (detailsVisible && inDetailInput) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
+});
+
+init();
+</script>
+</body>
+</html>
