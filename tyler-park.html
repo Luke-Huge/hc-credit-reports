@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Report Breakdown — Tyler M. Park</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 14px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; color: #a0aec0; margin-top: 2px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .header .meta span {
+    font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 5px 14px; border-radius: 8px; color: #e2e8f0;
+  }
+  .header .meta span strong { color: #fff; }
+
+  .overall-grade {
+    text-align: center; padding: 30px 20px; margin-bottom: 24px; border-radius: 14px;
+    border: 2px solid #d97706; background: #fffbeb;
+  }
+  .overall-grade .label { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 6px; }
+  .overall-grade .grade { font-size: 80px; font-weight: 900; color: #d97706; line-height: 1; }
+  .overall-grade .verdict { font-weight: 700; font-size: 16px; color: #92400e; margin-top: 14px; margin-bottom: 10px; }
+  .overall-grade .meaning { font-size: 14px; color: #44403c; max-width: 640px; margin-left: auto; margin-right: auto; text-align: left; }
+  .overall-grade .meaning strong { color: #1a1a2e; }
+  .overall-grade .meaning ul { margin-top: 6px; margin-left: 18px; }
+  .overall-grade .meaning li { margin-bottom: 4px; }
+  .overall-grade .funding-range { margin-top: 14px; font-size: 13px; color: #92400e; font-weight: 700; }
+
+  .card {
+    border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px; margin-bottom: 18px; background: #fff;
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+  }
+  .section-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  }
+
+  .factor-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .factor-row:last-child { border-bottom: none; }
+  .factor-info { flex: 1; }
+  .factor-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .factor-value { font-size: 13px; color: #4a5568; margin-top: 2px; }
+  .factor-note { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+  .grade-badge {
+    font-size: 15px; font-weight: 800; padding: 6px 16px; border-radius: 8px;
+    min-width: 40px; text-align: center; flex-shrink: 0; margin-left: 12px;
+  }
+  .grade-a { background: #dcfce7; color: #15803d; }
+  .grade-b { background: #d1fae5; color: #047857; }
+  .grade-c { background: #fef9c3; color: #a16207; }
+  .grade-d { background: #ffedd5; color: #c2410c; }
+  .grade-f { background: #fee2e2; color: #dc2626; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th {
+    text-align: left; padding: 10px 12px; background: #f8fafc; color: #64748b;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e2e8f0;
+  }
+  table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: #f8fafc; }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 600; }
+  .text-amber { color: #d97706; font-weight: 600; }
+  .text-muted { color: #94a3b8; }
+
+  .noted-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .noted-grid { grid-template-columns: 1fr; } }
+  .noted-item { background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+  .noted-item .label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+  .noted-item .val { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .noted-item .detail { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .noted-item.wide { grid-column: 1 / -1; }
+
+  .solution-step { padding: 16px 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid; }
+  .solution-step.priority-1 { background: #fef2f2; border-color: #dc2626; }
+  .solution-step.priority-2 { background: #fffbeb; border-color: #d97706; }
+  .solution-step.priority-3 { background: #eff6ff; border-color: #3b82f6; }
+  .solution-step.priority-note { background: #f8fafc; border-color: #94a3b8; }
+  .solution-step .step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .solution-step.priority-1 .step-label { color: #dc2626; }
+  .solution-step.priority-2 .step-label { color: #d97706; }
+  .solution-step.priority-3 .step-label { color: #3b82f6; }
+  .solution-step.priority-note .step-label { color: #64748b; }
+  .solution-step .step-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .solution-step .step-detail { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  .bottom-line {
+    text-align: center; padding: 18px; border-radius: 10px; margin-top: 14px;
+    font-size: 14px; font-weight: 600; line-height: 1.7;
+  }
+  .bottom-line.grade-outlook-proceed {
+    background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
+  }
+
+  .category-header td {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 10px 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .cat-cards td { background: #eef2ff !important; color: #4338ca; border-left: 4px solid #6366f1; }
+  .cat-student td { background: #fdf4ff !important; color: #86198f; border-left: 4px solid #c026d3; }
+  .cat-mortgage td { background: #fff7ed !important; color: #9a3412; border-left: 4px solid #f97316; }
+  .cat-closed td { background: #f1f5f9 !important; color: #475569; border-left: 4px solid #94a3b8; }
+
+  .inquiry-popup {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+  }
+  .inquiry-popup.active { display: flex; }
+  .inquiry-popup-content {
+    background: #fff; border-radius: 14px; padding: 24px; max-width: 700px; width: 90%;
+    max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .inquiry-popup-content h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #1a1a2e; }
+  .inquiry-summary { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .inquiry-summary .stat {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 120px; text-align: center;
+  }
+  .inquiry-summary .stat .num { font-size: 22px; font-weight: 800; }
+  .inquiry-summary .stat .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+  .close-btn {
+    float: right; background: #f1f5f9; border: none; border-radius: 8px; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; font-weight: 600; color: #64748b;
+  }
+  .close-btn:hover { background: #e2e8f0; }
+  .disputable { color: #16a34a; font-weight: 700; }
+  .not-disputable { color: #dc2626; font-weight: 700; }
+
+  .disclaimer {
+    margin-top: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; font-size: 11px; color: #64748b; line-height: 1.6;
+  }
+
+  .footer { text-align: center; padding: 24px 0 8px; font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .footer .logo { font-weight: 800; color: #1a1a2e; font-size: 13px; margin-bottom: 4px; }
+
+  .clickable { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; }
+  .clickable:hover { color: #4f46e5; }
+</style>
+</head>
+<body>
+
+<!-- 1. HEADER -->
+<div class="header">
+  <h1>Credit Report Breakdown</h1>
+  <div class="subtitle">Huge Capital AI Credit Grading System</div>
+  <div class="meta">
+    <span><strong>Client:</strong> Tyler M. Park</span>
+    <span><strong>Source:</strong> Experian FICO 8</span>
+    <span><strong>Score:</strong> 727</span>
+    <span><strong>Report:</strong> Aug 19, 2025</span>
+  </div>
+</div>
+
+<!-- 2. OVERALL GRADE -->
+<div class="overall-grade">
+  <div class="label">Overall Grade</div>
+  <div class="grade">C+</div>
+  <div class="verdict">Can proceed with low expectations, or take time to fix dragging factors and come back stronger.</div>
+  <div class="meaning">
+    <strong>Why:</strong> Strong foundation (zero late payments, long credit age, no collections, no bankruptcies) but weak own card profile (only 1 card at $4,800), that card at 49% utilization, and 10 inquiries dragging the grade down. Most of this client's cards are authorized user accounts which don't count for stacking.
+    <ul>
+      <li><strong>Path forward (recommended &mdash; be patient):</strong> Dispute 9 of 10 inquiries (all disputable per 30-day rule), apply for a personal loan to pay down the JPMCB card balance, and build own card profile through personal credit stacking. After fixes &rarr; B or higher.</li>
+      <li><strong>Path forward (proceed now):</strong> Can submit with rock-bottom expectations. Only 1 own card at $4,800 means banks won't have much to mirror.</li>
+    </ul>
+  </div>
+  <div class="funding-range">Estimated Funding Range: $10K &ndash; $40K</div>
+</div>
+
+<!-- 3. FACTOR BREAKDOWN -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #eef2ff; color: #4f46e5;">8</div>
+    Factor Breakdown
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">1. Credit Score</div>
+      <div class="factor-value">727 &mdash; Good range, solid for approvals</div>
+    </div>
+    <div class="grade-badge grade-b">B</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">2. Utilization (Own Revolving)</div>
+      <div class="factor-value">49% &mdash; $2,358 used / $4,800 total own revolving limits</div>
+      <div class="factor-note">Only 1 own revolving card. Report shows 7% overall but that includes AU card limits ($101,300 in AU limits inflate the denominator).</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">3. Late Payments</div>
+      <div class="factor-value">0 &mdash; Zero late payments across all accounts, ever</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">4. Credit Age</div>
+      <div class="factor-value">6 yrs 5 mos average / oldest account 14 yrs 8 mos</div>
+      <div class="factor-note">Strong age boosted by AU accounts. Own oldest account (EdFinancial) is ~6 years.</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">5. Credit Cards (Own Unsecured)</div>
+      <div class="factor-value">1 own card &mdash; JPMCB at $4,800 limit. No anchor card ($10K+).</div>
+      <div class="factor-note">4 AU cards ($8.2K, $29.1K, $32K, $32K) don't count. Weak own profile is the biggest blocker for stacking.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name clickable" onclick="document.getElementById('inquiry-popup').classList.add('active')">6. Inquiries (click for detail)</div>
+      <div class="factor-value">10 total on Experian &mdash; 9 disputable, 1 not disputable</div>
+      <div class="factor-note">7 credit card inquiries + 3 mortgage inquiries. Most are from 2025 and have no resulting account.</div>
+    </div>
+    <div class="grade-badge grade-d">D</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">7. Collections / Charge-offs</div>
+      <div class="factor-value">0 &mdash; Clean</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+
+  <div class="factor-row">
+    <div class="factor-info">
+      <div class="factor-name">8. Bankruptcies</div>
+      <div class="factor-value">None &mdash; No public records</div>
+    </div>
+    <div class="grade-badge grade-a">A</div>
+  </div>
+</div>
+
+<!-- INQUIRY POPUP -->
+<div class="inquiry-popup" id="inquiry-popup" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="inquiry-popup-content">
+    <button class="close-btn" onclick="document.getElementById('inquiry-popup').classList.remove('active')">Close</button>
+    <h3>Inquiry Detail &mdash; 30-Day Rule</h3>
+    <div class="inquiry-summary">
+      <div class="stat"><div class="num">10</div><div class="lbl">Total</div></div>
+      <div class="stat"><div class="num disputable">9</div><div class="lbl">Disputable</div></div>
+      <div class="stat"><div class="num not-disputable">1</div><div class="lbl">Not Disputable</div></div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Creditor</th><th>Date</th><th>Type</th><th>Account in 30 Days?</th><th>Disputable?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Cap One NA</td><td>Jul 27, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>Covius Mortgage Soluti</td><td>Jul 24, 2025</td><td>Mortgage</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>JPMCB Card</td><td>Apr 28, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>Cap One NA</td><td>Mar 12, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>Cap One NA</td><td>Mar 11, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>JPMCB Card</td><td>Mar 11, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>JPMCB Card</td><td>Feb 24, 2025</td><td>Credit Cards</td><td>No</td><td class="disputable">Yes</td></tr>
+        <tr><td>IR/Wintrust Mortgage</td><td>Dec 9, 2024</td><td>Mortgage</td><td>Yes &mdash; US Bank mortgage opened Dec 31, 2024</td><td class="not-disputable">No</td></tr>
+        <tr><td>CBC/Homestead Funding</td><td>Oct 31, 2024</td><td>Mortgage</td><td>No &mdash; mortgage opened 61 days later</td><td class="disputable">Yes</td></tr>
+        <tr><td>Xactus-Avantus/Neighbo</td><td>Oct 31, 2024</td><td>Mortgage</td><td>No &mdash; mortgage opened 61 days later</td><td class="disputable">Yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 4. PER-CARD UTILIZATION -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #fef9c3; color: #a16207;">%</div>
+    Per-Card Utilization (Own Revolving)
+  </div>
+  <table>
+    <thead>
+      <tr><th>Card</th><th>Balance</th><th>Limit</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JPMCB Card (Feb 2023)</td>
+        <td>$2,358</td>
+        <td>$4,800</td>
+        <td class="text-red">49%</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top: 12px; padding: 10px 14px; background: #fffbeb; border-radius: 8px; font-size: 12px; color: #92400e; border: 1px solid #fde68a;">
+    <strong>Note:</strong> Only 1 own revolving card on the entire report. The $4,800 limit is well below the $10K anchor threshold. The 49% utilization on this card is the primary factor dragging the score and stacking potential.
+  </div>
+</div>
+
+<!-- 5. NEXT STEPS -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #dcfce7; color: #16a34a;">&rarr;</div>
+    Next Steps
+  </div>
+
+  <div class="solution-step priority-1">
+    <div class="step-label">Step 1</div>
+    <div class="step-title">Dispute 9 Inquiries on Experian</div>
+    <div class="step-detail">9 of 10 inquiries are disputable (no resulting account within 30 days). The only non-disputable inquiry is IR/Wintrust Mortgage (tied to the Dec 2024 mortgage). Experian inquiries can be removed in 24-48 hours. This alone drops the inquiry grade from D to A.</div>
+  </div>
+
+  <div class="solution-step priority-2">
+    <div class="step-label">Step 2</div>
+    <div class="step-title">Apply for a Personal Loan to Consolidate JPMCB Balance</div>
+    <div class="step-detail">The $2,358 balance on the $4,800 JPMCB card puts own utilization at 49%. A personal loan pays off the card, drops utilization to 0%, and adds account mix. Wait 2-4 weeks for the $0 balance to report before proceeding.</div>
+  </div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 3</div>
+    <div class="step-title">Personal Credit Stacking to Build Own Card Profile</div>
+    <div class="step-detail">With only 1 own card at $4,800, the client needs more own unsecured cards before business stacking will produce meaningful results. Personal credit stacking builds the card profile that banks mirror during business card approvals. Target at least 2-3 additional own cards with one at $10K+.</div>
+  </div>
+
+  <div class="solution-step priority-3">
+    <div class="step-label">Step 4</div>
+    <div class="step-title">Re-evaluate and Proceed with Business Credit Stacking</div>
+    <div class="step-detail">After inquiry removal, personal loan paydown, and personal card stacking, this profile jumps to B or higher. At that point, proceed with business credit stacking with realistic expectations of $40K-$75K.</div>
+  </div>
+
+  <div class="solution-step priority-note">
+    <div class="step-label">Other Useful Notes</div>
+    <div class="step-title">Student Loan Context</div>
+    <div class="step-detail">5 federal student loans totaling $15,711 are currently deferred (payments begin Nov 2025). When repayment starts, estimated $157/mo added to monthly obligations. This won't affect stacking directly but will impact DTI for any income-verified products. Client has a security alert on file (fraud alert placed Nov 2024).</div>
+  </div>
+</div>
+
+<!-- 6. NOTED ITEMS -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #f1f5f9; color: #475569;">i</div>
+    Noted Items (Not Graded)
+  </div>
+  <div class="noted-grid">
+    <div class="noted-item">
+      <div class="label">AU Count</div>
+      <div class="val">4 open / 2 closed</div>
+      <div class="detail">Open: CBNA $8.2K, Discover $32K, JPMCB $29.1K, JPMCB $32K. All with parent's accounts (Chase, Discover, Citi).</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">5/24 Rule</div>
+      <div class="val">1/5 cards &bull; 0 loans</div>
+      <div class="detail">1 personal card opened in 24 months (JPMCB Feb 2023). Well under the 5/24 threshold for Chase.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">DTI (Debt to Income)</div>
+      <div class="val">$1,494/mo</div>
+      <div class="detail">Mortgage $1,454 + JPMCB min $40. Student loans add ~$157/mo starting Nov 2025.</div>
+    </div>
+    <div class="noted-item">
+      <div class="label">Per-Card Utilization</div>
+      <div class="val">49% on only card</div>
+      <div class="detail">JPMCB at $2,358/$4,800. All AU cards at $0 balance.</div>
+    </div>
+    <div class="noted-item wide">
+      <div class="label">Card Breakdown</div>
+      <div class="val">1 own unsecured &bull; 4 AU cards</div>
+      <div class="detail">Own: JPMCB $4,800. AU: CBNA $8,200, Discover $32,000, JPMCB $29,100, JPMCB $32,000. No secured cards, no charge cards.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. ACCOUNT INVENTORY -->
+<div class="card">
+  <div class="section-title">
+    <div class="icon" style="background: #e0e7ff; color: #4338ca;">&#9776;</div>
+    Full Account Inventory
+  </div>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Opened</th><th>Balance</th><th>Limit/Orig</th><th>Payment</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <!-- CREDIT CARDS -->
+      <tr class="category-header cat-cards"><td colspan="6">CREDIT CARDS</td></tr>
+      <tr>
+        <td><strong>JPMCB Card</strong> (own)</td>
+        <td>Feb 2023</td>
+        <td>$2,358</td>
+        <td>$4,800</td>
+        <td>$40/mo</td>
+        <td class="text-green">Open</td>
+      </tr>
+      <tr>
+        <td>JPMCB Card <span class="text-muted">(AU)</span></td>
+        <td>Jul 2021</td>
+        <td>$0</td>
+        <td>$29,100</td>
+        <td>$0</td>
+        <td class="text-green">Open</td>
+      </tr>
+      <tr>
+        <td>JPMCB Card <span class="text-muted">(AU)</span></td>
+        <td>Sep 2015</td>
+        <td>$0</td>
+        <td>$32,000</td>
+        <td>$40</td>
+        <td class="text-green">Open</td>
+      </tr>
+      <tr>
+        <td>Discover <span class="text-muted">(AU)</span></td>
+        <td>Nov 2011</td>
+        <td>$0</td>
+        <td>$32,000</td>
+        <td>$35</td>
+        <td class="text-green">Open</td>
+      </tr>
+      <tr>
+        <td>CBNA <span class="text-muted">(AU)</span></td>
+        <td>Dec 2012</td>
+        <td>$0</td>
+        <td>$8,200</td>
+        <td>$0</td>
+        <td class="text-green">Open</td>
+      </tr>
+
+      <!-- STUDENT LOANS -->
+      <tr class="category-header cat-student"><td colspan="6">STUDENT LOANS</td></tr>
+      <tr>
+        <td>EdFinancial Services</td>
+        <td>Aug 2020</td>
+        <td>$5,439</td>
+        <td>$5,431</td>
+        <td>$0</td>
+        <td class="text-amber">Deferred</td>
+      </tr>
+      <tr>
+        <td>EdFinancial Services</td>
+        <td>Aug 2019</td>
+        <td>$3,508</td>
+        <td>$3,500</td>
+        <td>$0</td>
+        <td class="text-amber">Deferred</td>
+      </tr>
+      <tr>
+        <td>EdFinancial Services</td>
+        <td>Aug 2021</td>
+        <td>$2,755</td>
+        <td>$2,750</td>
+        <td>$0</td>
+        <td class="text-amber">Deferred</td>
+      </tr>
+      <tr>
+        <td>EdFinancial Services</td>
+        <td>Aug 2020</td>
+        <td>$2,021</td>
+        <td>$2,069</td>
+        <td>$0</td>
+        <td class="text-amber">Deferred</td>
+      </tr>
+      <tr>
+        <td>EdFinancial Services</td>
+        <td>Aug 2019</td>
+        <td>$1,988</td>
+        <td>$2,000</td>
+        <td>$0</td>
+        <td class="text-amber">Deferred</td>
+      </tr>
+
+      <!-- MORTGAGE -->
+      <tr class="category-header cat-mortgage"><td colspan="6">MORTGAGE</td></tr>
+      <tr>
+        <td>US Bank Home Mortgage</td>
+        <td>Dec 2024</td>
+        <td>$167,019</td>
+        <td>$168,000</td>
+        <td>$1,454/mo</td>
+        <td class="text-green">Open</td>
+      </tr>
+
+      <!-- CLOSED ACCOUNTS -->
+      <tr class="category-header cat-closed"><td colspan="6">CLOSED ACCOUNTS</td></tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>Barrington Bank/Wintru</td>
+        <td>Dec 2024</td>
+        <td>$0</td>
+        <td>$168,000</td>
+        <td>$0</td>
+        <td>Mortgage &mdash; Purchased by US Bank</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>JPMCB Card <span class="text-muted">(AU)</span></td>
+        <td>May 2020</td>
+        <td>$0</td>
+        <td>$14,900</td>
+        <td>&mdash;</td>
+        <td>Credit Card &mdash; Closed at consumer request</td>
+      </tr>
+      <tr style="color: #94a3b8; font-style: italic;">
+        <td>JPMCB Card <span class="text-muted">(AU)</span></td>
+        <td>Dec 2010</td>
+        <td>$0</td>
+        <td>$13,000</td>
+        <td>&mdash;</td>
+        <td>Credit Card &mdash; Closed at consumer request</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 8. BOTTOM LINE -->
+<div class="bottom-line grade-outlook-proceed">
+  <strong>Can proceed with low expectations</strong> &mdash; 1 own card at $4,800 limits what banks can mirror. Score is solid and history is clean, but the thin own profile means smaller approvals.<br><br>
+  <strong>Or be patient:</strong> Dispute the 9 disputable inquiries (D &rarr; A), pay down JPMCB with a personal loan (D &rarr; A), and stack 2-3 personal cards to build own profile (D &rarr; B). After those fixes, this becomes a <strong>B+ profile</strong> with $40K-$75K potential.
+</div>
+
+<!-- 9. DISCLAIMER -->
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> This grading and analysis is based on the personal credit report and data from thousands of funded applications. However, funding is not guaranteed. Factors such as business credit history, liens or judgements, maxed out business credit cards, and prior relationship history with banks applied to could affect approval outcomes.
+</div>
+
+<div class="footer">
+  <div class="logo">HUGE CAPITAL</div>
+  Powered by Huge Capital AI Credit Grading System
+</div>
+
+</body>
+</html>
